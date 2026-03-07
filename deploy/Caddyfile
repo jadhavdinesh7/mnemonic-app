@@ -1,0 +1,25 @@
+# Serve the mnemonic medium app
+# Replace :80 with your domain (e.g., mnemonic.yourdomain.com) for auto-HTTPS
+
+:80 {
+    root * /var/www/mnemonic
+    file_server
+
+    # SPA fallback — all routes serve index.html (hash routing handles the rest)
+    try_files {path} /index.html
+
+    # Cache static assets aggressively
+    @static {
+        path *.js *.css *.svg *.png *.jpg *.webp *.woff2
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
+    # Don't cache HTML (so deploys are picked up immediately)
+    @html {
+        path *.html /
+    }
+    header @html Cache-Control "no-cache, no-store, must-revalidate"
+
+    # Compression
+    encode gzip zstd
+}

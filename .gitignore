@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Dev
+.vite/
+*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Extracted content (large file, not needed in repo)
+extracted_chapters.json
+
+# Env
+.env
+.env.*
