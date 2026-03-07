@@ -1,12 +1,15 @@
-name: Build & Deploy to Raspberry Pi
+name: Build & Publish
 
 on:
   push:
     branches: [main]
-  workflow_dispatch: # allows manual trigger from GitHub UI
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build-and-deploy:
+  build-and-publish:
     runs-on: ubuntu-latest
     
     steps:
@@ -25,12 +28,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy to Raspberry Pi
-        uses: burnett01/rsync-deployments@7.0.1
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          switches: -avz --delete --checksum
-          path: dist/
-          remote_path: ${{ secrets.PI_DEPLOY_PATH }}
-          remote_host: ${{ secrets.PI_HOST }}
-          remote_user: ${{ secrets.PI_USER }}
-          remote_key: ${{ secrets.PI_SSH_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
