@@ -84,17 +84,22 @@ export const essaySections = [
                     {
                         id: 'card-complexity-def',
                         question: 'How does Ousterhout define complexity in a software system?',
-                        answer: 'Complexity is anything related to the structure of a software system that makes it hard to understand and modify.'
+                        answer: 'Anything related to the structure of a software system that makes it hard to understand and modify. It\'s not about size or sophistication — a small system can be deeply complex if it\'s hard to change.'
                     },
                     {
-                        id: 'card-three-symptoms',
-                        question: 'What are the three symptoms of complexity?',
-                        answer: 'Change amplification (one change requires many modifications), cognitive load (too much information to hold in your head), and unknown unknowns (not obvious what could break).'
+                        id: 'card-complexity-app',
+                        question: 'A 200-line module has 3 configuration flags with subtle interactions. A 2,000-line module has a clean API and no surprises. Which is more complex in Ousterhout\'s definition?',
+                        answer: 'The 200-line module. Complexity is not about size — it\'s about how hard the system is to understand and modify.'
                     },
                     {
-                        id: 'card-worst-symptom',
-                        question: 'Which symptom of complexity is the most dangerous, and why?',
-                        answer: 'Unknown unknowns — because you don\'t even know what you don\'t know. You can\'t ask the right questions, and bugs surface silently in production.'
+                        id: 'card-unknown-unknowns',
+                        question: 'Why are unknown unknowns the most dangerous symptom of complexity?',
+                        answer: 'Because you don\'t know what you don\'t know — there\'s no way to discover the problem until a bug appears. Change amplification is visible; cognitive load is heavy but known. Unknown unknowns are silent.'
+                    },
+                    {
+                        id: 'card-unknown-unknowns-reverse',
+                        question: '"I changed one line and it broke something in a completely different file I didn\'t know was related." Which symptom of complexity is this?',
+                        answer: 'Unknown unknowns — you didn\'t know what you needed to know. The dependency was invisible.'
                     },
                 ]
             },
@@ -128,14 +133,19 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-two-causes',
-                        question: 'What are the two fundamental causes of complexity?',
-                        answer: 'Dependencies (code that can\'t be understood or modified in isolation) and obscurity (important information that isn\'t obvious).'
+                        id: 'card-obscurity-reverse',
+                        question: '"A developer looking at the code cannot quickly determine what is relevant." What is Ousterhout\'s term for this cause of complexity?',
+                        answer: 'Obscurity — when important information is not obvious. It creates unknown unknowns and contributes to cognitive load.'
                     },
                     {
                         id: 'card-incremental',
                         question: 'Why does Ousterhout say complexity is "incremental"?',
-                        answer: 'No single decision makes a system complex. Complexity accumulates from hundreds of small shortcuts and hacks that each seem reasonable in isolation but pile up relentlessly over time.'
+                        answer: 'No single shortcut makes a system complex. Complexity accumulates from hundreds of small dependencies and obscurities that each seem harmless in isolation.'
+                    },
+                    {
+                        id: 'card-incremental-app',
+                        question: 'A team adds a small workaround to hit a deadline. The code review passes — it\'s "just one small hack." What principle explains why this is still dangerous?',
+                        answer: 'Complexity is incremental — each small hack seems individually harmless, but hundreds of them make the system unmaintainable. This is why Ousterhout demands a "zero tolerance" philosophy.'
                     },
                 ]
             },
@@ -181,19 +191,19 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-tactical-def',
-                        question: 'What is "tactical programming"?',
-                        answer: 'A mindset where the primary goal is getting code working — shipping features, fixing bugs. It feels productive but introduces complexity with each task through shortcuts and kludges.'
+                        id: 'card-tactical-reverse',
+                        question: '"Just a small kludge here, a quick workaround there — it won\'t matter." What programming mindset produces this attitude?',
+                        answer: 'Tactical programming — prioritizing working code over clean design. Each shortcut adds incremental complexity that accumulates into an unmaintainable codebase.'
                     },
                     {
                         id: 'card-strategic-def',
-                        question: 'What is "strategic programming" and how does it differ from tactical?',
-                        answer: 'Strategic programming prioritizes producing a great design, not just working code. You invest time upfront to find the cleanest solution, preventing long-term complexity accumulation.'
+                        question: 'In strategic programming, what is your primary goal?',
+                        answer: 'To produce a great design — not just working code. Working code is a given; the bar is higher. You invest time upfront knowing the payoff comes as the project evolves.'
                     },
                     {
                         id: 'card-invest-pct',
-                        question: 'How much of your development time does Ousterhout suggest investing in design improvement?',
-                        answer: 'About 10-20% of total development time spent on improving the design — this is not a luxury but the minimum to prevent the system from degrading.'
+                        question: 'How much development time does Ousterhout suggest investing in design improvement, and why does this pay for itself?',
+                        answer: 'About 10-20%. Within a few months, the benefits from past investments save enough time to cover future investments — so the 10-20% becomes free.'
                     },
                 ]
             },
@@ -236,29 +246,19 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-interface-impl',
-                        question: 'What are the two parts of every module?',
-                        answer: 'An interface (what you must know to use it) and an implementation (how it does its job).'
-                    },
-                    {
                         id: 'card-deep-module-def',
                         question: 'What makes a module "deep"?',
-                        answer: 'A deep module has a simple interface but hides a complex implementation — it provides powerful functionality with minimal cognitive cost to its users.'
+                        answer: 'It has a simple interface but hides a complex implementation — providing powerful functionality with minimal cognitive cost to users. Think of module depth as the ratio of hidden functionality to interface complexity.'
                     },
                     {
-                        id: 'card-shallow-module-def',
-                        question: 'What is a "shallow module" and why is it problematic?',
-                        answer: 'A shallow module\'s interface is complicated relative to the functionality it provides. It doesn\'t reduce system complexity because the cost of using it (learning the interface) isn\'t justified by the work it does.'
+                        id: 'card-deep-module-app',
+                        question: 'Unix file I/O has 5 calls (open, read, write, lseek, close) hiding 100K+ lines. Java requires FileInputStream → BufferedInputStream → ObjectInputStream just to read a buffered file. Which is deeper, and why?',
+                        answer: 'Unix is deep — simple interface, massive hidden complexity. Java\'s I/O is shallow — the interface complexity (3 classes, specific wiring order) is nearly as great as what it provides.'
                     },
                     {
-                        id: 'card-unix-example',
-                        question: 'What example does Ousterhout use to illustrate a deep module?',
-                        answer: 'Unix file I/O — just five basic calls (open, read, write, lseek, close) hide enormously complex implementation dealing with disk blocks, caching, device drivers, and permissions.'
-                    },
-                    {
-                        id: 'card-classitis',
-                        question: 'What is "classitis"?',
-                        answer: 'The disease of creating too many small, shallow classes on the mistaken belief that classes should be small. Java\'s I/O system (FileInputStream → BufferedInputStream → ObjectInputStream) is the classic example.'
+                        id: 'card-classitis-reverse',
+                        question: '"Each class is individually simple, but there are so many small classes that the system-level interface complexity is enormous." What does Ousterhout call this disease?',
+                        answer: 'Classitis — the mistaken belief that "classes should be small." Small classes don\'t contribute much functionality, so you need many of them, and their interfaces accumulate into tremendous system-level complexity.'
                     },
                 ]
             },
@@ -306,19 +306,19 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-info-hiding-def',
-                        question: 'What is information hiding?',
-                        answer: 'Each module encapsulates design decisions within its implementation, keeping them invisible to other modules by not exposing them in its interface.'
+                        id: 'card-info-hiding-relationship',
+                        question: 'What is the relationship between information hiding and deep modules?',
+                        answer: 'Information hiding is "the most important technique for achieving deep modules." Each module encapsulates design decisions in its implementation, keeping them out of the interface — which makes the interface simpler and the module deeper.'
                     },
                     {
-                        id: 'card-info-hiding-benefits',
-                        question: 'What are the two ways information hiding reduces complexity?',
-                        answer: 'First, it simplifies the interface (users don\'t need to know hidden details). Second, it makes the system easier to evolve (hidden details can change without affecting external code).'
+                        id: 'card-info-leakage-app',
+                        question: 'Two classes both know the format of a JSON config file — one reads it, the other writes it. If the format changes, both need modification. What design problem is this?',
+                        answer: 'Information leakage — knowledge of the file format has leaked into two modules instead of being encapsulated in one. The fix: merge the reading/writing into a single class that owns the format knowledge.'
                     },
                     {
-                        id: 'card-info-leakage',
-                        question: 'What is "information leakage" and what causes it?',
-                        answer: 'Information leakage occurs when a design decision is reflected in multiple modules, requiring changes to several places when that decision changes. A common cause is temporal decomposition — structuring code around time order rather than units of knowledge.'
+                        id: 'card-temporal-decomp-reverse',
+                        question: '"We structured the code into three classes — one for reading the file, one for modifying it, one for writing it — matching the order of operations." What anti-pattern is this?',
+                        answer: 'Temporal decomposition — structuring code around time order instead of units of knowledge. Reading and writing both need knowledge of the file format, causing information leakage between the classes.'
                     },
                 ]
             },
@@ -361,13 +361,18 @@ export const essaySections = [
                 cards: [
                     {
                         id: 'card-general-purpose',
-                        question: 'Why do general-purpose interfaces tend to be simpler than special-purpose ones?',
-                        answer: 'Because they express a few powerful operations rather than many specific ones. The interface is simpler even though the implementation may do more.'
+                        question: 'Why do general-purpose interfaces tend to be <em>simpler</em> than special-purpose ones?',
+                        answer: 'They express a few powerful operations rather than many situation-specific ones — fewer methods, each deeper. This also produces better information hiding, since special-purpose knowledge stays in the caller.'
                     },
                     {
-                        id: 'card-sweet-spot',
-                        question: 'What is the "sweet spot" for module design regarding generality?',
-                        answer: 'The module\'s functionality should reflect current needs, but its interface should be general enough to support multiple uses. Special-purpose knowledge is pushed up to the caller.'
+                        id: 'card-general-purpose-app',
+                        question: 'A text editor class has separate methods: backspace(cursor), delete(cursor), deleteSelection(selection). A redesign replaces all three with delete(start, end). Why is the redesign better?',
+                        answer: 'The general-purpose delete(start, end) is simpler (one method instead of three), deeper (hides nothing the user needs), and reusable for any future operation. The special-purpose methods leaked UI concepts into the text class.'
+                    },
+                    {
+                        id: 'card-sweet-spot-reverse',
+                        question: '"The module\'s functionality should reflect current needs, but its interface should not be tied to them." What design principle is this describing?',
+                        answer: '"Somewhat general-purpose" — the sweet spot where you implement for today\'s needs but design the interface to support multiple uses.'
                     },
                 ]
             },
@@ -404,12 +409,17 @@ export const essaySections = [
                     {
                         id: 'card-pull-down',
                         question: 'What does "pull complexity downwards" mean?',
-                        answer: 'Handle complexity in a module\'s implementation rather than pushing it onto users through the interface. The cost is paid once by the developer rather than repeatedly by every user.'
+                        answer: 'Handle complexity in the module\'s implementation rather than pushing it onto users through the interface. One developer suffers so that many users don\'t have to.'
                     },
                     {
-                        id: 'card-config-params',
-                        question: 'Why does Ousterhout consider configuration parameters a red flag?',
-                        answer: 'They shift complexity upward to every user of the module, making the module shallower. It\'s often a sign the developer was too lazy to determine a reasonable default or make the system adaptive.'
+                        id: 'card-pull-down-app',
+                        question: 'A network library exposes a retryTimeout config parameter, requiring every user to determine the right value. How could you pull this complexity down?',
+                        answer: 'Compute the timeout automatically by measuring response times — the module determines a reasonable value internally instead of punting the decision to every user.'
+                    },
+                    {
+                        id: 'card-config-params-reverse',
+                        question: '"The developer didn\'t know what value to pick, so they made it a configuration parameter." This is shifting complexity in which direction?',
+                        answer: 'Upwards — configuration parameters push decisions onto users, making the module shallower. The developer should compute reasonable defaults or make the system adaptive.'
                     },
                 ]
             },
@@ -457,17 +467,17 @@ export const essaySections = [
                     {
                         id: 'card-define-errors-out',
                         question: 'What does "define errors out of existence" mean?',
-                        answer: 'Instead of defining exceptions and handling them, redefine the operation\'s semantics so the error case doesn\'t exist — the normal behavior handles what used to be an error.'
+                        answer: 'Instead of defining exceptions and handling them, redefine the operation\'s semantics so the error case simply doesn\'t exist. The normal behavior handles what used to be an "error."'
                     },
                     {
-                        id: 'card-unlink-example',
-                        question: 'How does Unix\'s file deletion illustrate "defining errors out of existence"?',
-                        answer: 'Unix\'s unlink always succeeds immediately, even if the file is open — the name disappears but contents are preserved for existing users. Unlike Windows, which fails with an error if the file is in use, Unix eliminates the error case entirely.'
+                        id: 'card-define-errors-app',
+                        question: 'A deleteVariable(name) function throws an error if the variable doesn\'t exist. Developers wrap every call in try/catch since they don\'t always know which variables exist. How would you fix this?',
+                        answer: 'Redefine it as "ensure this variable no longer exists." If it\'s already gone, the work is done — no error case. This is exactly the mistake Ousterhout made with Tcl\'s unset command.'
                     },
                     {
-                        id: 'card-exception-techniques',
-                        question: 'Besides defining errors out of existence, what are three other techniques for reducing exception complexity?',
-                        answer: 'Exception masking (handle at low level so callers never see them), exception aggregation (one handler for many exception types), and just crash (restart on truly unexpected errors).'
+                        id: 'card-unlink-reverse',
+                        question: '"Unix\'s unlink always succeeds, even if the file is open. The name disappears but existing processes keep reading normally." What technique does this illustrate?',
+                        answer: 'Defining errors out of existence — the operation is redefined so there\'s nothing to fail. It also illustrates pulling complexity downward, since the OS handles the hard case instead of making every caller deal with it.'
                     },
                 ]
             },
@@ -502,13 +512,18 @@ export const essaySections = [
                 cards: [
                     {
                         id: 'card-design-twice',
-                        question: 'What does "design it twice" mean, and how different should the alternatives be?',
-                        answer: 'For important design decisions, consider at least two approaches before committing. The alternatives should be radically different, not minor variations — fundamentally different interfaces, representations, or structures.'
+                        question: 'What does "design it twice" require, and how different should the alternatives be?',
+                        answer: 'Consider at least two approaches before committing, and they must be radically different — not minor variations. Compare on simplicity, generality, performance, and ease of modification.'
                     },
                     {
-                        id: 'card-design-twice-why',
-                        question: 'Why does the "design it twice" practice lead to better designs?',
-                        answer: 'Your first idea is rarely your best. Comparing it to a radically different alternative sharpens your understanding of trade-offs and often leads to a hybrid that\'s better than either original.'
+                        id: 'card-design-twice-app',
+                        question: 'You\'re designing a text storage class. You sketch a character-oriented API and a line-oriented API, but both are awkward for the UI. What should you do?',
+                        answer: 'Try a third, radically different approach. The problems with the first two reveal what the interface really needs — operations on arbitrary ranges of characters. The design-it-twice process often leads to a hybrid better than any original.'
+                    },
+                    {
+                        id: 'card-design-twice-reverse',
+                        question: '"Smart people discover their first quick idea is sufficient for a good grade, so they never consider alternatives." What bad habit does Ousterhout say this creates?',
+                        answer: 'Insisting on implementing the first idea that comes to mind — believing "smart people get it right the first time." But software design is hard enough that no one gets it right on the first try.'
                     },
                 ]
             },
@@ -547,19 +562,19 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-name-image',
-                        question: 'What should a good name do, according to Ousterhout?',
-                        answer: 'A good name should create a vivid image in the reader\'s mind — they should immediately have a clear picture of what it represents, without ambiguity or needing to read the implementation.'
+                        id: 'card-block-bug',
+                        question: 'What happened because of the variable named "block" in the Sprite operating system?',
+                        answer: 'The same name was used for both physical disk blocks and logical file blocks. A logical block number was accidentally used where a physical one was needed, silently corrupting data. It took 6 months to find the bug.'
                     },
                     {
-                        id: 'card-name-precise',
-                        question: 'Why does Ousterhout consider names like "result," "data," and "tmp" to be red flags?',
-                        answer: 'They are too vague — they could apply to many different things and tell you nothing specific. Names should be precise enough to communicate the exact purpose and behavior.'
+                        id: 'card-naming-consistency-app',
+                        question: 'Your codebase uses "count" in some files to mean "number of users" and in others to mean "number of retries." A new developer reads "if (count > 10)" and assumes it\'s users, but it\'s retries. What naming principle was violated?',
+                        answer: 'Consistency — the same name was used for different purposes, creating obscurity. Consistency requires: always use the same name for the same purpose, and never use it for anything else.'
                     },
                     {
-                        id: 'card-name-consistency',
-                        question: 'What is the naming consistency rule?',
-                        answer: 'Use the same name for the same purpose everywhere, and never use the same name for different purposes. Inconsistent naming (e.g., "block" vs "chunk" for the same concept) creates unnecessary cognitive load.'
+                        id: 'card-precision-reverse',
+                        question: '"If someone sees this name in isolation, without seeing its declaration or documentation, how closely will they guess what it refers to?" What property of good names is this testing?',
+                        answer: 'Precision — a good name creates a vivid, unambiguous image of what the entity is (and what it is not). Names like "result," "data," and "tmp" fail this test.'
                     },
                 ]
             },
@@ -594,13 +609,8 @@ export const essaySections = [
                 cards: [
                     {
                         id: 'card-obvious-test',
-                        question: 'What is the ultimate test of good software design?',
-                        answer: 'Can someone reading the code quickly understand what it does? If yes, the code is obvious. If they need to puzzle, guess, or read external documentation, the code is obscure.'
-                    },
-                    {
-                        id: 'card-most-important-quality',
-                        question: 'What does Ousterhout consider the most important quality of code?',
-                        answer: 'Obviousness — not cleverness, brevity, or performance. Obvious code is easier to debug, extend, review, and produces fewer bugs.'
+                        question: 'What does Ousterhout consider the single most important quality of code?',
+                        answer: 'Obviousness — not cleverness, brevity, or performance. If someone reading the code can quickly understand what it does, the code is obvious. If they need to puzzle or guess, it\'s obscure.'
                     },
                 ]
             },
@@ -641,14 +651,9 @@ export const essaySections = [
                 type: 'cards',
                 cards: [
                     {
-                        id: 'card-deep-vs-shallow',
-                        question: 'Compare a deep module to a shallow one using a concrete example.',
-                        answer: 'Deep: Unix file I/O — 5 simple calls hide enormous complexity. Shallow: Java\'s I/O — FileInputStream → BufferedInputStream → ObjectInputStream — three classes to do what Unix does with open + read.'
-                    },
-                    {
-                        id: 'card-strategic-investment',
-                        question: 'What is the minimum investment Ousterhout recommends for a strategic approach to design?',
-                        answer: '10-20% of total development time spent on improving design quality — enough to prevent the system from degenerating into tactical complexity.'
+                        id: 'card-synthesis-fight',
+                        question: 'How do all of the book\'s principles — deep modules, information hiding, pulling complexity down, defining errors out — relate to each other?',
+                        answer: 'They are all weapons in the fight against complexity. Deep modules are the goal; information hiding is the primary technique to achieve them; pulling complexity down and defining errors out are specific strategies that make modules deeper.'
                     },
                 ]
             },
