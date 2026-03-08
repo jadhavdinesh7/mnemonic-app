@@ -15,11 +15,11 @@
 export const essayMeta = {
     id: 'philosophy-software-design',
     title: 'A Philosophy of Software Design',
-    subtitle: 'The most important ideas, presented in a mnemonic medium',
+    subtitle: 'The most important ideas, explained like a friend would',
     author: 'Based on the book by John Ousterhout',
-    description: 'Learn the foundational principles of software design through an interactive essay that makes memory a choice.',
+    description: 'Learn the foundational principles of software design through a brain-friendly essay with built-in memory superpowers.',
     cardCount: 0, // will be computed
-    readingTime: '35 min',
+    readingTime: '40 min',
 };
 
 // Each section has: id, heading, content (array of { type, text/items/cards })
@@ -34,15 +34,19 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'All of software design can be reduced to one fight: the fight against <strong>complexity</strong>. It is the great monster of software engineering. It slows you down. It makes bugs hide. It makes simple changes feel terrifyingly risky. Every great principle in this essay — every technique, every heuristic — is ultimately a weapon in this fight.'
+                text: 'Picture this: you open a codebase to make a "simple" change. Three hours later, you\'re still at it — touching files you didn\'t know existed, scared you\'ll break something. Sound familiar?'
             },
             {
                 type: 'paragraph',
-                text: 'John Ousterhout, a professor of computer science at Stanford and the creator of the Tcl scripting language, wrote <em>A Philosophy of Software Design</em> to distill decades of teaching and practice into a single, coherent philosophy. His central argument is both simple and profound: <strong>the most fundamental problem in computer science is managing complexity</strong>. The purpose of design is to make systems easy to understand and modify.'
+                text: 'That feeling? It has a name. It\'s called <strong>complexity</strong>. And it\'s the single biggest enemy in all of software engineering. Every technique in this essay — every principle, every trick — is a weapon to fight it.'
             },
             {
                 type: 'paragraph',
-                text: 'This is not a book about algorithms or data structures. It\'s about something harder to teach and more important to master: how to <em>decompose problems</em> so that the resulting system is simple, not just working.'
+                text: '<a href="https://en.wikipedia.org/wiki/John_Ousterhout" target="_blank">John Ousterhout</a>, a Stanford professor who created the <a href="https://en.wikipedia.org/wiki/Tcl" target="_blank">Tcl programming language</a>, spent decades watching students write code. He noticed something: <strong>the hardest part of programming isn\'t algorithms or data structures — it\'s managing complexity.</strong>'
+            },
+            {
+                type: 'paragraph',
+                text: 'So he wrote <em>A Philosophy of Software Design</em> to answer one question: how do you <a href="https://en.wikipedia.org/wiki/Decomposition_(computer_science)" target="_blank">decompose problems</a> so the resulting system stays simple — not just today, but as it evolves?'
             },
             {
                 type: 'blockquote',
@@ -60,23 +64,27 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Ousterhout defines complexity with unusual precision. <strong>Complexity is anything related to the structure of a software system that makes it hard to understand and modify.</strong> It is not about the size of the codebase or the sophistication of the algorithms. A small system can be deeply complex; a large system can be simple.'
+                text: 'Here\'s the thing most developers get wrong about complexity: they think it means "big codebase" or "fancy <a href="https://en.wikipedia.org/wiki/Algorithm" target="_blank">algorithms</a>." It doesn\'t.'
             },
             {
                 type: 'paragraph',
-                text: 'Complexity manifests in three concrete symptoms that every developer has felt:'
+                text: 'Ousterhout\'s definition is surprisingly simple: <strong>complexity is anything that makes your code hard to understand or change.</strong> That\'s it. A 200-line module with three config flags that interact in weird ways? That\'s complex. A 2,000-line module with a clean <a href="https://en.wikipedia.org/wiki/API" target="_blank">API</a>? That might actually be simple.'
+            },
+            {
+                type: 'paragraph',
+                text: 'You\'ll feel complexity in three ways — and you\'ve probably already experienced all three:'
             },
             {
                 type: 'list',
                 items: [
-                    '<strong>Change amplification</strong> — a simple change requires modifications in many different places. You change one thing and must chase it across ten files.',
-                    '<strong>Cognitive load</strong> — a developer must hold too much information in their head to complete a task. The mental juggling act becomes unbearable.',
-                    '<strong>Unknown unknowns</strong> — the most dangerous symptom. It\'s not obvious what you need to know, or what could break. You don\'t even know what questions to ask.'
+                    '<strong>Change amplification</strong> — you change one thing, then have to chase it across ten files. Like pulling one thread and having the whole sweater unravel.',
+                    '<strong>Cognitive load</strong> — you need to hold so many details in your head just to make a change. It\'s like juggling ten balls at once while someone keeps throwing more.',
+                    '<strong>Unknown unknowns</strong> — the scary one. You don\'t even know what you don\'t know. You make a change, it works fine in tests, then production breaks two weeks later.'
                 ]
             },
             {
                 type: 'paragraph',
-                text: 'Of these three, <strong>unknown unknowns are the worst</strong>. Change amplification is annoying but visible — you\'ll notice the work. Cognitive load is heavy but at least you know you\'re carrying it. Unknown unknowns are silent. They cause bugs that appear in production weeks later, in code you didn\'t think was related.'
+                text: 'Of these three, <strong>unknown unknowns are the worst</strong> — and it\'s not close. Change amplification is annoying, but at least you can see the work. Cognitive load is exhausting, but at least you know you\'re struggling. Unknown unknowns? They\'re silent. They\'re bugs hiding in code you didn\'t even think was related to your change.'
             },
             {
                 type: 'cards',
@@ -115,19 +123,19 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Complexity has exactly two causes: <strong>dependencies</strong> and <strong>obscurity</strong>.'
+                text: 'So where does complexity actually come from? Ousterhout boils it down to just two things: <strong>dependencies</strong> and <strong>obscurity</strong>.'
             },
             {
                 type: 'paragraph',
-                text: 'A <strong>dependency</strong> exists when a piece of code cannot be understood or modified in isolation — it relates to some other code, and the other code must be considered or changed if the first is changed. Dependencies are fundamental; you can never eliminate them entirely. The goal of design is to <em>reduce the number of dependencies</em> and to <em>make remaining dependencies obvious</em>.'
+                text: 'A <strong><a href="https://en.wikipedia.org/wiki/Coupling_(computer_programming)" target="_blank">dependency</a></strong> means you can\'t understand or change one piece of code without considering another. Think of it like a chain — pull one link, and the rest moves too. You can\'t eliminate dependencies entirely (code has to talk to other code), but you can <em>reduce them</em> and <em>make the remaining ones obvious</em>.'
             },
             {
                 type: 'paragraph',
-                text: '<strong>Obscurity</strong> occurs when important information is not obvious. It might be a variable name that is too generic, or a dependency that is not documented, or a side effect that is not apparent from the interface. If a developer looking at the code cannot quickly determine what is relevant, the system is obscure.'
+                text: '<strong>Obscurity</strong> is when important information is hiding. Maybe a variable name is too vague. Maybe there\'s a side effect that isn\'t obvious from the interface. You look at the code and think "I get it" — but you\'re actually missing something critical.'
             },
             {
                 type: 'paragraph',
-                text: 'Here\'s the crucial insight: <strong>complexity is incremental</strong>. No single dependency or obscurity, by itself, makes a system complex. Complexity accumulates from hundreds of small decisions. Each shortcut seems reasonable in isolation — "it\'s just a small hack" — but they pile up relentlessly. This is why good software design requires a zero-tolerance philosophy toward complexity, applied consistently in every change.'
+                text: 'Now here\'s the really scary part: <strong>complexity is incremental.</strong> No single hack makes a system complex. It\'s death by a thousand paper cuts. Each shortcut feels harmless — "it\'s just one small workaround" — but they pile up. This is why Ousterhout demands <em>zero tolerance</em> toward complexity, in every single commit.'
             },
             {
                 type: 'cards',
@@ -161,7 +169,7 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Ousterhout identifies two fundamentally different mindsets for software development, and argues that choosing between them will determine the long-term quality of your code.'
+                text: 'Here\'s a question that will change how you write code: <strong>what\'s your primary goal when you sit down to program?</strong> Your answer reveals which of two mindsets you operate in — and Ousterhout argues it determines everything about your code\'s future.'
             },
             {
                 type: 'subheading',
@@ -169,7 +177,7 @@ export const essaySections = [
             },
             {
                 type: 'paragraph',
-                text: '<strong>Tactical programming</strong> treats getting something working as the primary goal. Ship the feature. Fix the bug. Hit the deadline. It feels very productive in the moment. But the tactical programmer introduces complexity with each task — "just a small kludge here, a quick workaround there." Over time, the codebase becomes a minefield.'
+                text: 'The tactical programmer\'s goal? <strong>Get it working.</strong> Ship the feature. Fix the bug. Hit the deadline. It feels productive — you\'re cranking out tickets! But each task leaves behind a little mess. "Just a small kludge here, a quick workaround there." Over a few months, the codebase turns into a minefield where nobody wants to touch anything.'
             },
             {
                 type: 'subheading',
@@ -177,11 +185,11 @@ export const essaySections = [
             },
             {
                 type: 'paragraph',
-                text: '<strong>Strategic programming</strong> is the opposite mindset. Your primary goal is not just to make code work, but to produce a <em>great design</em>. Working code is a given — the bar is higher. You invest time upfront to find the cleanest solution, knowing this investment will pay for itself many times over as the project evolves.'
+                text: 'The strategic programmer\'s goal? <strong>Produce a great design</strong> — not just working code. Working code is the bare minimum. You invest time to find the <em>cleanest</em> solution, because you know that investment pays for itself as the project grows.'
             },
             {
                 type: 'paragraph',
-                text: 'Ousterhout suggests investing about <strong>10-20% of your development time</strong> on improving the design of the system. This is not a luxury; it\'s the minimum investment to prevent the system from degenerating into a tactical disaster. Think of it as paying down technical debt with every commit.'
+                text: 'How much time? Ousterhout says <strong>10-20% of your development time</strong> should go toward improving design. Sounds expensive, right? But here\'s the magic: within a few months, the benefits from past investments save more time than future investments cost. Think of it like compound interest, but for <a href="https://en.wikipedia.org/wiki/Technical_debt" target="_blank">technical debt</a>.'
             },
             {
                 type: 'blockquote',
@@ -219,19 +227,23 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'This is perhaps the most important idea in the entire book. Ousterhout introduces a visual metaphor that, once you see it, changes how you think about every class and function you write.'
+                text: 'This is the big idea — the one concept that, once you get it, changes how you look at every class and function you write.'
             },
             {
                 type: 'paragraph',
-                text: 'Every module (class, function, service) has two parts: an <strong>interface</strong> and an <strong>implementation</strong>. The interface is what you must know to use the module. The implementation is how it does its job. A module\'s depth is determined by the ratio between these two.'
+                text: 'Every <a href="https://en.wikipedia.org/wiki/Modular_programming" target="_blank">module</a> (class, function, service — anything you can use as a building block) has two parts: its <strong>interface</strong> (what you need to know to use it) and its <strong>implementation</strong> (how it actually works inside). The magic number is the <em>ratio</em> between these two.'
             },
             {
                 type: 'paragraph',
-                text: 'A <strong>deep module</strong> has a simple interface but hides a complex implementation. It provides powerful functionality with minimal cognitive cost to its users. Think of the Unix file I/O system: five basic calls (<code>open</code>, <code>read</code>, <code>write</code>, <code>lseek</code>, <code>close</code>) hide an enormously complex implementation dealing with disk blocks, caching, device drivers, and permissions.'
+                text: 'Imagine a vending machine. You press a button, you get a drink. Simple interface. But inside, there\'s a mini-factory: refrigeration, coin counting, inventory tracking. That\'s a <strong>deep module</strong> — simple to use, powerful inside.'
             },
             {
                 type: 'paragraph',
-                text: 'A <strong>shallow module</strong> is the opposite: its interface is complicated relative to the functionality it provides. Shallow modules don\'t help much in the fight against complexity because they don\'t do enough work to justify the cognitive cost of learning their interface.'
+                text: '<a href="https://en.wikipedia.org/wiki/Unix" target="_blank">Unix</a> file I/O is the classic software example: just five calls (<code>open</code>, <code>read</code>, <code>write</code>, <code>lseek</code>, <code>close</code>) hide over 100,000 lines dealing with disk blocks, <a href="https://en.wikipedia.org/wiki/Cache_(computing)" target="_blank">caching</a>, device drivers, and permissions. That\'s deep.'
+            },
+            {
+                type: 'paragraph',
+                text: 'A <strong>shallow module</strong> is the opposite — its interface is almost as complicated as what it does. It\'s like a vending machine where you have to select the shelf number, the column number, insert the exact change in a specific coin order, and then pull a lever. Not worth the effort.'
             },
             {
                 type: 'red-flag',
@@ -240,7 +252,7 @@ export const essaySections = [
             },
             {
                 type: 'paragraph',
-                text: 'Ousterhout warns against <strong>"classitis"</strong> — the disease of creating too many small, shallow classes on the mistaken belief that "classes should be small." Java\'s I/O system is his canonical example: to read a file with buffering, you must create a <code>FileInputStream</code>, wrap it in a <code>BufferedInputStream</code>, then wrap that in an <code>ObjectInputStream</code>. Three classes to do what Unix does with <code>open</code> plus <code>read</code>.'
+                text: 'And here\'s a trap many developers fall into: <strong>"classitis"</strong> — creating tons of tiny classes because someone told them "classes should be small." <a href="https://en.wikipedia.org/wiki/Java_(programming_language)" target="_blank">Java</a>\'s I/O system is the textbook example: to read a file with buffering, you need <code>FileInputStream</code> → <code>BufferedInputStream</code> → <code>ObjectInputStream</code>. Three classes to do what Unix does with <code>open</code> + <code>read</code>. Each class is shallow — the real cost is in learning how to wire them together.'
             },
             {
                 type: 'cards',
@@ -274,28 +286,32 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'If deep modules are the goal, then <strong>information hiding</strong> is the primary technique for achieving them. This idea, first articulated by David Parnas in 1971, remains one of the most powerful principles in all of software engineering.'
+                text: 'So we know deep modules are the goal. But how do you <em>actually build</em> one? The answer: <strong><a href="https://en.wikipedia.org/wiki/Information_hiding" target="_blank">information hiding</a></strong>. This idea was first described by <a href="https://en.wikipedia.org/wiki/David_Parnas" target="_blank">David Parnas</a> back in 1971, and it\'s still one of the most powerful concepts in software.'
             },
             {
                 type: 'paragraph',
-                text: 'The basic idea: each module should encapsulate a few pieces of knowledge — design decisions — within its implementation. These details should <em>not appear in its interface</em>, and should therefore be invisible to other modules. Examples of information that can be hidden:'
+                text: 'The core idea is straightforward: each module should keep its <em>design decisions</em> locked inside its implementation. They shouldn\'t leak out into the interface. Think of it like a restaurant kitchen — as a customer, you just order from the menu. You don\'t need to know the chef\'s recipes, the supplier\'s delivery schedule, or how the dishwasher works.'
+            },
+            {
+                type: 'paragraph',
+                text: 'What kind of stuff should be hidden? Things like:'
             },
             {
                 type: 'list',
                 items: [
-                    'How to store information in a B-tree and access it efficiently',
-                    'How to identify which physical disk block corresponds to each logical block in a file',
-                    'How to implement the TCP network protocol',
-                    'How to parse JSON documents',
+                    'How data is stored in a <a href="https://en.wikipedia.org/wiki/B-tree" target="_blank">B-tree</a> and accessed efficiently',
+                    'How physical disk blocks map to logical file blocks',
+                    'How the <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol" target="_blank">TCP</a> network protocol works under the hood',
+                    'How to parse <a href="https://en.wikipedia.org/wiki/JSON" target="_blank">JSON</a> documents',
                 ]
             },
             {
                 type: 'paragraph',
-                text: 'Information hiding reduces complexity in two ways. First, it <strong>simplifies the interface</strong> — users of the module don\'t need to know the hidden details. Second, it <strong>makes the system easier to evolve</strong> — since no external code depends on the hidden details, those details can be changed without affecting anything else.'
+                text: 'Why does this help? Two reasons. First, it <strong>simplifies the interface</strong> — you don\'t need to know the hidden stuff to use the module. Second, it <strong>makes the system easier to evolve</strong> — since nothing outside depends on those hidden details, you can change them freely without breaking anything.'
             },
             {
                 type: 'paragraph',
-                text: 'The opposite of information hiding is <strong>information leakage</strong>. This occurs when a design decision is reflected in multiple modules. If a change to that design decision requires modifications to several modules, information has leaked. One common cause is <strong>temporal decomposition</strong> — structuring code around the order operations happen in time rather than around units of knowledge.'
+                text: 'The opposite of information hiding is <strong>information leakage</strong> — and it\'s sneaky. It happens when a design decision shows up in multiple modules. If changing that decision means editing several files, information has leaked. A common cause? <strong>Temporal decomposition</strong> — organizing code by the <em>order things happen</em> (first read, then modify, then write) instead of by <em>what knowledge they share</em>.'
             },
             {
                 type: 'red-flag',
@@ -334,27 +350,27 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'One of the most common design questions is: should I make this module general-purpose or special-purpose? Ousterhout\'s answer is nuanced but powerful: <strong>make classes somewhat general-purpose</strong>.'
+                text: 'You\'re designing a new class and you hit the classic question: should it be <a href="https://en.wikipedia.org/wiki/Generalization" target="_blank">general-purpose</a> or special-purpose? Ousterhout\'s answer: <strong>make it somewhat general-purpose</strong>. And here\'s the surprising reason why.'
             },
             {
                 type: 'paragraph',
-                text: 'The key insight is that general-purpose interfaces tend to be <em>simpler</em> than special-purpose ones. This seems counterintuitive — wouldn\'t a general-purpose module need to do more? Yes, but its <strong>interface</strong> can actually be simpler because it expresses a few powerful operations rather than many specific ones.'
+                text: 'You\'d think a general-purpose module needs a <em>bigger</em> interface, right? Actually, it\'s the opposite. General-purpose interfaces tend to be <em>simpler</em> because they offer a few powerful operations instead of many specific ones. Fewer buttons, more power — like a Swiss Army knife vs. a drawer full of single-use gadgets.'
             },
             {
                 type: 'paragraph',
-                text: 'Ousterhout provides a litmus test. Ask yourself:'
+                text: 'Here\'s Ousterhout\'s litmus test — ask yourself these three questions:'
             },
             {
                 type: 'list',
                 items: [
                     'What is the simplest interface that will cover all my current needs?',
                     'In how many situations will this method be useful? (If only one, it\'s probably too specific.)',
-                    'Is this API easy to use for my current needs? (If you have to write a lot of additional code, it\'s too general.)',
+                    'Is this API easy to use for my current needs? (If you have to write a lot of glue code, it\'s too general.)',
                 ]
             },
             {
                 type: 'paragraph',
-                text: 'The sweet spot: the module\'s <em>functionality</em> should reflect current needs, but its <em>interface</em> should be general enough to support multiple uses. This approach also leads to better information hiding — the special-purpose knowledge gets pushed up to the caller, where it belongs.'
+                text: 'The sweet spot: build what you need <em>today</em>, but design the interface so it works for <em>tomorrow\'s</em> needs too. Bonus: this naturally pushes special-purpose knowledge up to the caller, where it belongs — making your module deeper.'
             },
             {
                 type: 'cards',
@@ -388,15 +404,15 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'When you face complexity that must exist somewhere, here\'s Ousterhout\'s rule: <strong>pull it down</strong>. Handle the complexity in the module\'s implementation rather than pushing it onto the user through the interface.'
+                text: 'Sometimes complexity has to live <em>somewhere</em>. The question is: where? Ousterhout\'s rule: <strong>pull it down.</strong> Put the hard stuff inside the module, not in the interface.'
             },
             {
                 type: 'paragraph',
-                text: 'This principle follows naturally from deep modules: most modules have far more users than developers. If you push complexity up into the interface, every user pays the cost. If you absorb it in the implementation, the cost is paid once by the module developer rather than repeatedly by every user.'
+                text: 'Think about it with simple math: your module probably has dozens (or thousands) of users but only one developer. If you push complexity up into the interface, <em>every single user</em> pays the cost. If you absorb it inside, you pay once — they pay never. One developer suffers so everyone else can relax.'
             },
             {
                 type: 'paragraph',
-                text: 'A common violation of this principle is <strong>configuration parameters</strong>. Rather than determining a reasonable default, the developer punts the decision to the user: "Hey, what do you want the buffer size to be? What timeout should I use?" Configuration parameters shift complexity upward, making the module shallower. Better to compute reasonable defaults, or make the system adaptive.'
+                text: 'The #1 violation of this principle? <strong>Configuration parameters.</strong> Instead of figuring out the right buffer size or timeout, the developer slaps in a config option: "Hey user, you decide!" That\'s not being flexible — that\'s being lazy. It shifts complexity upward. Better to compute reasonable defaults or make the system <a href="https://en.wikipedia.org/wiki/Adaptive_system" target="_blank">adaptive</a>.'
             },
             {
                 type: 'red-flag',
@@ -435,23 +451,23 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Exception handling is one of the worst sources of complexity in software systems. Developers love to throw exceptions — it feels responsible, diligent. But Ousterhout argues it\'s often the opposite: <strong>most exceptions aren\'t necessary</strong>, and defining them creates more problems than it solves.'
+                text: 'Here\'s something counterintuitive: <a href="https://en.wikipedia.org/wiki/Exception_handling" target="_blank">exception handling</a> is one of the <em>worst</em> sources of complexity. You\'d think throwing exceptions is the responsible thing to do. Ousterhout says it\'s often the opposite: <strong>most exceptions aren\'t necessary</strong>, and defining them creates more problems than it solves.'
             },
             {
                 type: 'paragraph',
-                text: 'His radical prescription: instead of defining exceptions and then figuring out how to handle them, <strong>redefine the operation so that the error case doesn\'t exist</strong>. Change the semantics so the "normal" behavior handles what used to be an "error."'
+                text: 'His radical idea: instead of defining an error and then writing code to handle it, <strong>redefine the operation so the error case simply doesn\'t exist.</strong> Change the rules of the game.'
             },
             {
                 type: 'paragraph',
-                text: 'Consider file deletion. In Windows, if a file is in use by another process, the delete operation fails with an error. This sounds "correct," but creates enormous complexity — every caller must handle this case. Unix took the opposite approach: <code>unlink</code> always succeeds immediately, even if the file is open. The file\'s contents are preserved for existing users but the name disappears. The error has been defined out of existence.'
+                text: 'Real-world example: you try to delete a file on Windows, but another program is using it. Windows says "Error! File in use." Now every caller has to handle that case. <a href="https://en.wikipedia.org/wiki/Unix" target="_blank">Unix</a> took the opposite approach: <code>unlink</code> always succeeds, even if the file is open. The name disappears, but existing processes keep reading the file just fine. The error? Defined out of existence.'
             },
             {
                 type: 'paragraph',
-                text: 'Another example: Java\'s <code>substring(start, end)</code> method throws <code>IndexOutOfBoundsException</code> if the indices are out of range. Python takes the opposite approach — slicing beyond the string\'s bounds simply returns what\'s available. Fewer exceptions, fewer bugs, simpler code.'
+                text: 'Another example: Java\'s <code>substring(start, end)</code> throws an <code>IndexOutOfBoundsException</code> if you go past the end. <a href="https://en.wikipedia.org/wiki/Python_(programming_language)" target="_blank">Python</a>\'s approach? Slicing past the end just gives you what\'s available. No exception. No error. Fewer bugs.'
             },
             {
                 type: 'paragraph',
-                text: 'Ousterhout also describes three other techniques for reducing exception complexity:'
+                text: 'Ousterhout also describes three more techniques for taming exception complexity:'
             },
             {
                 type: 'list',
@@ -493,19 +509,19 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Ousterhout recommends one of the simplest yet most underused practices in software engineering: <strong>design it twice</strong>. For any important design decision, consider at least two different approaches before committing.'
+                text: 'This one sounds almost too simple to be useful: <strong>before you commit to a design, come up with at least two approaches.</strong> And not small tweaks — they should be <em>radically</em> different.'
             },
             {
                 type: 'paragraph',
-                text: 'The two approaches should be <em>radically different</em>, not minor variations. If you\'re designing a class, sketch two completely different interfaces. If you\'re designing a data structure, consider two fundamentally different representations. Then compare them on factors like simplicity, generality, performance, and ease of modification.'
+                text: 'Designing a class? Sketch two completely different interfaces. Building a <a href="https://en.wikipedia.org/wiki/Data_structure" target="_blank">data structure</a>? Consider two fundamentally different representations. Then compare them: which is simpler? More general? Faster? Easier to change later?'
             },
             {
                 type: 'paragraph',
-                text: 'This practice works because your first idea is rarely your best. Even if you end up choosing something close to your first design, the exercise of comparing it to a radically different alternative sharpens your understanding of the trade-offs and often leads to a hybrid that\'s better than either original.'
+                text: 'Why does this work? Because your first idea is almost never your best. Even if you end up choosing something close to it, the act of comparing it to a radically different alternative sharpens your understanding. You often end up with a hybrid that\'s better than either original.'
             },
             {
                 type: 'paragraph',
-                text: 'It also develops your design sense over time. Designing it twice is how you build the intuition that separates great engineers from merely competent ones.'
+                text: 'There\'s a bonus: doing this over time builds your design intuition. It\'s the practice reps that separate great engineers from merely competent ones.'
             },
             {
                 type: 'cards',
@@ -539,19 +555,19 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Good names are a form of documentation and a form of abstraction. A well-chosen name communicates the purpose and behavior of a variable, method, or class without requiring the reader to dig into the implementation. <strong>Bad names cause bugs.</strong>'
+                text: 'This might seem like a small thing, but <strong>bad names cause real bugs.</strong> A good name is like a tiny piece of documentation built right into the code. A bad name is a trap waiting to catch the next developer.'
             },
             {
                 type: 'paragraph',
-                text: 'Ousterhout\'s first rule: <strong>names should create a vivid image</strong> in the reader\'s mind. When someone reads the name, they should immediately have a clear picture of what the thing represents, without ambiguity. If a name requires reading the implementation to understand, it has failed.'
+                text: 'Ousterhout\'s first rule: <strong>a name should create a vivid picture</strong> in the reader\'s mind. When you read <code>numActiveUsers</code>, you instantly know what it is. When you read <code>count</code>, you have no idea — count of what?'
             },
             {
                 type: 'paragraph',
-                text: 'His second rule: <strong>names should be precise</strong>. Vague names like <code>result</code>, <code>data</code>, <code>tmp</code>, and <code>info</code> are red flags. They tell you nothing specific. Consider the difference between <code>count</code> and <code>numActiveUsers</code>, or between <code>get</code> and <code>fetchFromRemoteServerIfNotCached</code>.'
+                text: 'His second rule: <strong>names should be precise.</strong> Vague names like <code>result</code>, <code>data</code>, <code>tmp</code>, and <code>info</code> are red flags. They\'re so generic they could mean anything. Compare <code>get</code> vs. <code>fetchFromRemoteServerIfNotCached</code> — which one tells you what\'s actually happening?'
             },
             {
                 type: 'paragraph',
-                text: 'He also emphasizes <strong>consistency</strong>: use the same name for the same purpose everywhere, and never use the same name for different purposes. If you call it <code>block</code> in one module and <code>chunk</code> in another for the same concept, you\'re creating unnecessary cognitive load.'
+                text: 'And then there\'s <strong>consistency</strong>: always use the same name for the same purpose, and <em>never</em> use the same name for different purposes. If you call it <code>block</code> in one module and <code>chunk</code> in another for the same concept, you\'re quietly building a maze for the next person who reads your code.'
             },
             {
                 type: 'red-flag',
@@ -590,19 +606,19 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'The ultimate test of good software design: <strong>can someone reading the code quickly understand what it does?</strong> If they can, the code is obvious. If they can\'t — if they need to spend time puzzling, guessing, or reading external documentation — the code is obscure.'
+                text: 'Here\'s Ousterhout\'s final test — the one that trumps everything else: <strong>can someone read your code and quickly understand what it does?</strong> If yes, your code is obvious. If they need to puzzle, guess, or open another file to figure it out — it\'s obscure.'
             },
             {
                 type: 'paragraph',
-                text: 'Obviousness is the single most important quality of code. Not cleverness. Not brevity. Not performance. <em>Obviousness.</em> Obvious code is easier to debug, easier to extend, easier to review, and produces fewer bugs.'
+                text: '<strong>Obviousness is the #1 quality of good code.</strong> Not cleverness (nobody cares how smart you are). Not brevity (short ≠ readable). Not performance (premature optimization is the root of all evil). Just: can someone read it and get it?'
             },
             {
                 type: 'paragraph',
-                text: 'Things that make code <strong>more</strong> obvious: good names (as we discussed), consistency in coding style, judicious use of whitespace and formatting, and comments that explain things not obvious from the code itself.'
+                text: 'Things that make code <strong>more</strong> obvious: good names (as we just covered), consistent coding style, smart use of whitespace, and comments that explain the <em>why</em> — not the <em>what</em>.'
             },
             {
                 type: 'paragraph',
-                text: 'Things that make code <strong>less</strong> obvious: event-driven programming (control flow is hard to follow), generic containers (what type of data is in this <code>Map</code>?), code that violates the reader\'s expectations, and different coding styles in different parts of the same system.'
+                text: 'Things that make code <strong>less</strong> obvious: <a href="https://en.wikipedia.org/wiki/Event-driven_programming" target="_blank">event-driven programming</a> (control flow becomes a maze), generic containers (what\'s actually in this <code>Map</code>?), code that surprises readers by doing something unexpected, and mixing different coding styles within the same project.'
             },
             {
                 type: 'cards',
@@ -626,26 +642,26 @@ export const essaySections = [
         content: [
             {
                 type: 'paragraph',
-                text: 'Every principle in this essay is a weapon in the fight against complexity. Here they are, distilled:'
+                text: 'You\'ve made it through the whole essay! Here\'s your cheat sheet — every weapon in the fight against complexity, in one place:'
             },
             {
                 type: 'list',
                 items: [
-                    '<strong>Complexity is the enemy.</strong> Everything you do should reduce it.',
-                    '<strong>Working code isn\'t enough.</strong> Be a strategic programmer, not a tactical one.',
-                    '<strong>Modules should be deep.</strong> Simple interface, complex implementation.',
-                    '<strong>Hide information.</strong> Design decisions should be encapsulated, not leaked.',
-                    '<strong>General-purpose interfaces are simpler.</strong> Specialize the functionality, not the interface.',
-                    '<strong>Pull complexity downwards.</strong> The module developer pays once; the users pay never.',
+                    '<strong>Complexity is the enemy.</strong> Every design decision should reduce it.',
+                    '<strong>Working code isn\'t enough.</strong> Be strategic, not tactical.',
+                    '<strong>Modules should be deep.</strong> Simple interface, powerful implementation.',
+                    '<strong>Hide information.</strong> Encapsulate design decisions — don\'t leak them.',
+                    '<strong>General-purpose interfaces are simpler.</strong> Fewer buttons, more power.',
+                    '<strong>Pull complexity downwards.</strong> You pay once; your users pay never.',
                     '<strong>Define errors out of existence.</strong> Fewer exceptions = fewer bugs.',
-                    '<strong>Design it twice.</strong> Your first idea is probably not your best.',
+                    '<strong>Design it twice.</strong> Your first idea is almost never your best.',
                     '<strong>Names create images.</strong> Precise, vivid, consistent.',
                     '<strong>Code should be obvious.</strong> If it requires puzzling, redesign it.',
                 ]
             },
             {
                 type: 'paragraph',
-                text: 'These principles are not rules to follow mechanically. They are a way of seeing — a lens through which every design decision can be evaluated. The more you practice them, the more natural they become, until one day they are simply how you think about code.'
+                text: 'These aren\'t rules to follow mechanically. They\'re a way of <em>seeing</em> — a lens for every design decision you\'ll ever make. Practice them enough, and they\'ll become second nature. One day, you won\'t even think about them — they\'ll just be how you write code.'
             },
             {
                 type: 'cards',
