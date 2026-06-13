@@ -116,7 +116,9 @@ export const aboutEssay = {
             items: [
                 '<strong>Try to answer before revealing.</strong> Even if you\'re not sure, the act of trying to recall strengthens your memory far more than passively reading the answer.',
                 '<strong>Be honest.</strong> If you didn\'t remember, click "Didn\'t remember." The system will show you this card again sooner. There\'s no penalty for forgetting — it\'s information your brain needs to consolidate.',
+                '<strong>Getting one wrong is good news.</strong> A miss tells the system exactly what to bring back. As Andy Matuschak puts it, the right response to a wrong answer is to throw your hands in the air and shout "wonderful!" — now your brain knows what to work on.',
                 '<strong>Come back for reviews.</strong> The real magic happens not during first reading, but during review sessions. Each review takes just a few minutes but extends your retention by weeks or months.',
+                '<strong>These questions serve you — not the other way around.</strong> They are never a test or a judgment. If they ever start to feel stressful or make you feel bad, that\'s a signal to stop and come back later. The point is to help you, calmly.',
             ]
         },
         {

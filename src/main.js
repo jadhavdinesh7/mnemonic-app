@@ -13,6 +13,7 @@ import './style.css';
 import { essays, getEssay, getAllGlobalCardIds, getAllGlobalCards, aboutEssay } from './content/registry.js';
 import {
   initCardState,
+  markCardSeen,
   recordReview,
   getCardState,
   getLevelLabel,
@@ -22,10 +23,23 @@ import {
   getEssayStats,
   resetEssayProgress,
   resetAllProgress,
+  exportProgress,
+  importProgress,
   ReviewOutcome,
 } from './engine/scheduler.js';
 
 const app = document.getElementById('app');
+
+// Human-friendly "when is my next review" label, e.g. "in 5 days".
+function formatRelativeDays(ts) {
+  if (!ts) return null;
+  const days = Math.round((ts - Date.now()) / (1000 * 60 * 60 * 24));
+  if (days <= 0) return 'soon';
+  if (days === 1) return 'tomorrow';
+  if (days < 14) return `in ${days} days`;
+  if (days < 60) return `in ${Math.round(days / 7)} weeks`;
+  return `in ${Math.round(days / 30)} months`;
+}
 
 // ============================================================
 // Router
@@ -111,6 +125,7 @@ function renderLandingPage() {
                   <span>🧠 ${essay.meta.cardCount} review cards</span>
                   ${stats.reviewed > 0 ? `<span>✅ ${stats.reviewed}/${stats.totalCards} reviewed</span>` : ''}
                   ${stats.dueNow > 0 ? `<span style="color: var(--color-primary); font-weight: 600;">🔔 ${stats.dueNow} due</span>` : ''}
+                  ${stats.dueNow === 0 && stats.nextDueTimestampMillis ? `<span>🗓️ next review ${formatRelativeDays(stats.nextDueTimestampMillis)}</span>` : ''}
                 </div>
               </div>
               <div class="essay-card-arrow">→</div>
@@ -145,16 +160,20 @@ function renderLandingPage() {
           </div>
         ` : ''}
 
-        ${globalStats.reviewed > 0 ? `
-          <div style="margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid rgba(0,0,0,0.08);">
-            <div class="landing-section-title">Settings</div>
-            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: var(--space-md);">
-              <button class="btn btn-secondary" id="reset-all-btn" style="font-size: var(--font-size-xs);">
-                ↻ Reset all progress
-              </button>
-            </div>
+        <div style="margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid rgba(0,0,0,0.08);">
+          <div class="landing-section-title">Backup &amp; settings</div>
+          <p style="font-family: var(--font-sans); font-size: var(--font-size-xs); color: var(--color-text-muted); margin: var(--space-xs) 0 var(--space-md); max-width: 480px;">
+            Your review progress is saved only in this browser. Export a backup file to keep it safe — or to move it to another device. Importing merges a backup back in.
+          </p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: var(--space-md);">
+            <button class="btn btn-secondary" id="export-btn" style="font-size: var(--font-size-xs);">⬇ Export progress</button>
+            <label class="btn btn-secondary" style="font-size: var(--font-size-xs); cursor: pointer;">
+              ⬆ Import progress
+              <input type="file" id="import-input" accept="application/json,.json" style="display: none;" />
+            </label>
+            ${globalStats.reviewed > 0 ? `<button class="btn btn-secondary" id="reset-all-btn" style="font-size: var(--font-size-xs); color: var(--color-forgot);">↻ Reset all progress</button>` : ''}
           </div>
-        ` : ''}
+        </div>
       </div>
     </div>
   `;
@@ -167,6 +186,42 @@ function renderLandingPage() {
         resetAllProgress();
         handleRoute(); // re-render
       }
+    });
+  }
+
+  // Export progress → download a JSON backup file
+  const exportBtn = document.getElementById('export-btn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const blob = new Blob([exportProgress()], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `mnemonic-progress-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Import progress ← read a JSON backup file and merge it in
+  const importInput = document.getElementById('import-input');
+  if (importInput) {
+    importInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const result = importProgress(String(reader.result), 'merge');
+          alert(`Imported progress for ${result.imported} cards.`);
+          handleRoute(); // re-render with restored progress
+        } catch (err) {
+          alert(`Could not import this file: ${err.message}`);
+        }
+      };
+      reader.readAsText(file);
     });
   }
 }
@@ -503,15 +558,22 @@ function renderReviewSession(essayId) {
 
   let currentIndex = 0;
   let results = { remembered: 0, forgotten: 0 };
+  // Faithful to Quantum Country: a forgotten card returns later in the SAME
+  // session and must be remembered before the session is done. We cap how many
+  // times one card can cycle so a persistently hard card can't trap the reader.
+  const uniqueTotal = reviewCards.length;
+  const MAX_RESHOWS = 2;
+  const reshowCounts = {};
+  const learned = new Set(); // card ids answered "remembered" this session
 
   function renderCurrentCard() {
     if (currentIndex >= reviewCards.length) {
-      renderReviewComplete(results, reviewCards.length, essayId);
+      renderReviewComplete(results, uniqueTotal, essayId);
       return;
     }
 
     const card = reviewCards[currentIndex];
-    const progress = ((currentIndex) / reviewCards.length) * 100;
+    const progress = (learned.size / uniqueTotal) * 100;
     const sourceLabel = card.essayTitle ? `from "${card.sectionHeading}" • ${card.essayTitle}` : `from "${card.sectionHeading}"`;
 
     const wrapper = document.querySelector('.review-session-card-wrapper');
@@ -519,7 +581,7 @@ function renderReviewSession(essayId) {
     const subtitle = document.querySelector('.review-session-subtitle');
 
     if (progressFill) progressFill.style.width = `${progress}%`;
-    if (subtitle) subtitle.textContent = `Card ${currentIndex + 1} of ${reviewCards.length} • ${sourceLabel}`;
+    if (subtitle) subtitle.textContent = `${learned.size} of ${uniqueTotal} learned • ${sourceLabel}`;
 
     if (wrapper) {
       wrapper.innerHTML = `
@@ -559,8 +621,19 @@ function renderReviewSession(essayId) {
         btn.addEventListener('click', () => {
           const outcome = btn.dataset.outcome;
           recordReview(card.id, outcome);
-          if (outcome === ReviewOutcome.Remembered) results.remembered++;
-          else results.forgotten++;
+          if (outcome === ReviewOutcome.Remembered) {
+            results.remembered++;
+            learned.add(card.id);
+          } else {
+            results.forgotten++;
+            learned.delete(card.id);
+            // Re-queue the forgotten card to reappear later this session.
+            const shown = reshowCounts[card.id] || 0;
+            if (shown < MAX_RESHOWS) {
+              reshowCounts[card.id] = shown + 1;
+              reviewCards.push(card);
+            }
+          }
           currentIndex++;
           renderCurrentCard();
         });
@@ -645,6 +718,11 @@ function setupCardInteractions(essay) {
       if (answerArea && answerContent) {
         answerArea.style.display = 'none';
         answerContent.style.display = 'block';
+      }
+      // Encountering a card in-text puts it on the schedule, even if the reader
+      // doesn't tap a grade button — so nothing read is ever lost from review.
+      if (cardEl && cardEl.dataset.cardId) {
+        markCardSeen(cardEl.dataset.cardId);
       }
     }
 
