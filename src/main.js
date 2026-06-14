@@ -573,6 +573,14 @@ function renderReviewSession(essayId) {
     }
 
     const card = reviewCards[currentIndex];
+    // Variant rotation: show a different phrasing of the same card on each review
+    // so you recall the idea, not the shape of the card. The answer you're graded
+    // against is always the canonical one.
+    const phrasings = [card.question, ...(card.variants || [])].filter(Boolean);
+    const cardState = getCardState(card.id);
+    const phraseIdx = phrasings.length > 1 ? ((cardState?.reviewCount || 0) % phrasings.length) : 0;
+    const shownQuestion = phrasings[phraseIdx];
+    const isReworded = phraseIdx > 0;
     const progress = (learned.size / uniqueTotal) * 100;
     const sourceLabel = card.essayTitle ? `from "${card.sectionHeading}" • ${card.essayTitle}` : `from "${card.sectionHeading}"`;
 
@@ -586,7 +594,7 @@ function renderReviewSession(essayId) {
     if (wrapper) {
       wrapper.innerHTML = `
         <div class="review-card animate-fade-in" data-card-id="${card.id}">
-          <div class="review-card-question">${card.question}</div>
+          <div class="review-card-question">${shownQuestion}${isReworded ? ' <span style="font-size:0.55em;opacity:0.45;text-transform:uppercase;letter-spacing:0.06em;vertical-align:middle;">reworded</span>' : ''}</div>
           <div class="review-card-answer-area review-session-answer" data-card-id="${card.id}">
             <div class="review-card-answer-hidden" data-action="reveal">
               Click anywhere to reveal answer

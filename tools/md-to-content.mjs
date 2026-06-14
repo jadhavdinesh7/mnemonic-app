@@ -167,6 +167,7 @@ while (i < lines.length) {
   while (i < lines.length && !/^##\s/.test(lines[i])) {
     const l = lines[i];
     if (/^####\s/.test(l)) { i++; continue; }                 // "Try to recall" heading
+    if (/^!\[[^\]]*\]\([^)]*\)\s*$/.test(l)) { i++; continue; } // drop standalone image refs (images not rendered yet; captions are separate lines and kept)
     if (l.trim() === '') { flushList(); i++; continue; }
     if (/^###\s/.test(l)) { flushList(); content.push({ type: 'subheading', text: inline(l.replace(/^###\s+/, '')) }); i++; continue; }
 
