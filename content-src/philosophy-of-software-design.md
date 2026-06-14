@@ -308,6 +308,204 @@ Every module (a class, function, or service) has two parts: an **interface** (ev
 
 *Reflect:* Which module in your code has an interface almost as complicated as what it does?
 
+## S6. Information Hiding and Leakage
+
+*Before you read:* If deep modules are the goal, what is the main technique for making one?
+
+**Information hiding** is the main way to get deep modules: each module hides its design decisions inside its implementation, so they never appear in the interface. Because those decisions stay hidden, the interface gets simpler — and "simpler interfaces tend to correlate with better information hiding." The opposite is **information leakage**: a design decision is reflected in multiple modules, so changing it means editing several places. One common cause is **temporal decomposition** — structuring code around the *order* things happen (read, then modify, then write) instead of around units of knowledge, which spreads one decision across many pieces.
+
+**In short:** Hide each design decision inside one module; when a decision shows up in several modules, that's leakage.
+
+#### Try to recall — S6
+
+> [!card] posd-S6-01 | concept | recall | mechanism | - | 5.1 "Information hiding and deep modules are closely related"
+> **Q:** How does information hiding make a module deeper?
+> <details><summary>Answer</summary>
+>
+> It keeps design decisions out of the interface, so the interface stays simple while the module does a lot.
+>
+> </details>
+>
+> **V1:** Why is information hiding the main technique for deep modules?
+
+> [!card] posd-S6-02 | definition | recall | - | - | 5.2 "design decision is reflected in multiple modules"
+> **Q:** What is "information leakage"?
+> <details><summary>Answer</summary>
+>
+> When one design decision shows up in several modules, so a change forces edits in all of them.
+>
+> </details>
+>
+> **V1:** Two classes both know a file's format. What design problem is that?
+
+> [!card] posd-S6-03 | concept | recall | contrast | - | 5.1 "simpler interfaces tend to correlate with better information hiding"
+> **Q:** Information hiding vs information leakage — state the difference in one line.
+> <details><summary>Answer</summary>
+>
+> Hiding keeps a decision inside one module; leakage spreads the same decision across several.
+>
+> </details>
+>
+> **V1:** What is the opposite of information hiding?
+
+> [!card] posd-S6-04 | concept | recall | failure | - | 5.3 "Temporal decomposition"
+> **Q:** What is "temporal decomposition", and why does it cause leakage?
+> <details><summary>Answer</summary>
+>
+> Structuring code by the order of operations instead of by knowledge; one decision then spreads across the steps.
+>
+> </details>
+>
+> **V1:** Splitting code into read / modify / write classes risks which problem?
+
+*Reflect:* Which design decision in your code is currently known by more than one module?
+
+## S7. General-Purpose Modules Are Deeper
+
+*Before you read:* Should you build a module for exactly today's need, or for every possible future need?
+
+Ousterhout's answer is the middle: make modules **somewhat general-purpose**. The functionality should reflect your *current* needs, but the *interface* should be general enough to support more than one use. The surprising result is that a general-purpose interface is usually *simpler* (and so deeper) than a special-purpose one, because it offers a few powerful operations instead of many specific ones. To find the sweet spot he asks questions like "What is the simplest interface that will cover all my current needs?" And generality pays a bonus: it leads to better information hiding, because special-purpose knowledge is pushed up to the caller where it belongs.
+
+**In short:** Build for today's needs but with a general interface — it ends up simpler, deeper, and hides more.
+
+#### Try to recall — S7
+
+> [!card] posd-S7-01 | definition | recall | - | - | 6.1 "functionality should reflect your current needs"
+> **Q:** What does "somewhat general-purpose" mean?
+> <details><summary>Answer</summary>
+>
+> Implement for today's needs, but make the interface general enough to support other uses.
+>
+> </details>
+>
+> **V1:** Where should a module be specific (functionality) and where general (interface)?
+
+> [!card] posd-S7-02 | concept | recall | mechanism | - | 6.1 "somewhat general-purpose fashion"
+> **Q:** Why is a general-purpose interface often simpler and deeper than a special-purpose one?
+> <details><summary>Answer</summary>
+>
+> It offers a few powerful operations instead of many specific ones, so the interface is smaller.
+>
+> </details>
+>
+> **V1:** Replacing backspace/delete/deleteSelection with one delete(start,end) — why is that deeper?
+
+> [!card] posd-S7-03 | concept | recall | mechanism | - | 6.4 "Generality leads to better information hiding"
+> **Q:** How does making a module more general-purpose improve information hiding?
+> <details><summary>Answer</summary>
+>
+> Special-purpose knowledge moves up to the caller, so the module hides more inside.
+>
+> </details>
+>
+> **V1:** Why does pushing special-case knowledge to the caller help hiding?
+
+> [!card] posd-S7-04 | procedure | recall | - | - | 6.1 "simplest interface that will cover all my current needs"
+> **Q:** What question does Ousterhout ask to find the right amount of generality?
+> <details><summary>Answer</summary>
+>
+> "What is the simplest interface that will cover all my current needs?"
+>
+> </details>
+>
+> **V1:** Name one test for whether an interface is general enough but not too general.
+
+*Reflect:* Which special-purpose method in your code could become one simpler general operation?
+
+## S8. Different Layer, Different Abstraction
+
+*Before you read:* If two layers of your system look almost the same, is that good design?
+
+In a well-designed system, **different layers provide different abstractions**. If adjacent layers have the *same* abstraction, that's a red flag — the layers aren't earning their keep. The classic symptom is a **pass-through method**: a method that does almost nothing except pass its arguments to another method, usually with the same signature. Pass-through methods add interface (one more thing to learn) without adding functionality, so they make modules shallower. The fix is to give each layer a genuinely different job, or to remove the redundant layer.
+
+**In short:** Each layer should add a new abstraction; a method that just forwards its arguments is a warning sign.
+
+#### Try to recall — S8
+
+> [!card] posd-S8-01 | concept | recall | mechanism | - | 7 "Different Layer, Different Abstraction"
+> **Q:** What should adjacent layers of a system provide, and what's the warning sign?
+> <details><summary>Answer</summary>
+>
+> Different abstractions. If two adjacent layers have the same abstraction, that's a red flag.
+>
+> </details>
+>
+> **V1:** Two stacked layers with the same abstraction — what does that signal?
+
+> [!card] posd-S8-02 | definition | recall | - | - | 7 "pass its arguments to another"
+> **Q:** What is a "pass-through method"?
+> <details><summary>Answer</summary>
+>
+> A method that does little but pass its arguments on to another method with nearly the same signature.
+>
+> </details>
+>
+> **V1:** A method whose whole body just calls another method with the same args is called what?
+
+> [!card] posd-S8-03 | concept | recall | contrast | - | 7 "pass-through method"
+> **Q:** Why does a pass-through method make a module shallower, not deeper?
+> <details><summary>Answer</summary>
+>
+> It adds interface to learn but no new functionality — cost without benefit, the opposite of depth.
+>
+> </details>
+>
+> **V1:** How is a pass-through method the opposite of a deep module?
+
+*Reflect:* Is there a layer in your code that just forwards calls without adding anything?
+
+## S9. Pull Complexity Downwards
+
+*Before you read:* When some complexity is unavoidable, who should bear it — the module or its users?
+
+When complexity must exist somewhere, **pull it downwards**: handle it inside the module's implementation rather than exposing it through the interface. The reason is leverage — a module has many users but few developers, so it's better for one developer to absorb the complexity than for every user to. A good way to express the whole idea: "it is more important for a module to have a simple interface than a simple implementation." A common violation is **configuration parameters** — instead of the module deciding a sensible value, it pushes the decision up to every user. Better to compute a reasonable default; if a module can adjust itself, that "is better than exposing configuration parameters." Like all rules, this one can be taken too far, so use discretion.
+
+**In short:** Absorb complexity inside the module so users don't pay for it — a simple interface beats a simple implementation.
+
+#### Try to recall — S9
+
+> [!card] posd-S9-01 | definition | recall | - | - | 8 "Pull Complexity Downwards"
+> **Q:** What does "pull complexity downwards" mean?
+> <details><summary>Answer</summary>
+>
+> Handle unavoidable complexity inside the module's implementation instead of exposing it in the interface.
+>
+> </details>
+>
+> **V1:** Where should you put complexity that has to exist somewhere?
+
+> [!card] posd-S9-02 | concept | recall | mechanism | - | 8 "simple interface than a simple implementation"
+> **Q:** Why is it worth making the implementation harder to keep the interface simple?
+> <details><summary>Answer</summary>
+>
+> A module has many users but few developers; one developer's pain saves every user's.
+>
+> </details>
+>
+> **V1:** Simple interface or simple implementation — which matters more, and why?
+
+> [!card] posd-S9-03 | concept | recall | failure | - | 8 "better than exposing configuration parameters"
+> **Q:** Why are configuration parameters often a sign of pushing complexity the wrong way?
+> <details><summary>Answer</summary>
+>
+> They make every user decide a value the module should figure out itself; a sensible default is better.
+>
+> </details>
+>
+> **V1:** A network library exposes a retry-timeout parameter. What's the better design?
+
+> [!card] posd-S9-04 | concept | recall | contrast | - | 8 "can easily be overdone"
+> **Q:** Can pulling complexity downward be taken too far?
+> <details><summary>Answer</summary>
+>
+> Yes. Use discretion — cramming every hard case into one module can bloat it. Balance, not extremes.
+>
+> </details>
+>
+> **V1:** What's the limit on pulling complexity down?
+
+*Reflect:* Which config option in your code could be replaced by a sensible automatic default?
+
 ## Glossary
 
 | term | plain English |
@@ -322,3 +520,9 @@ Every module (a class, function, or service) has two parts: an **interface** (ev
 | deep module | simple interface hiding powerful functionality |
 | shallow module | interface almost as complex as what it does |
 | classitis | the mistaken belief that more, smaller classes are always better |
+| information hiding | hiding a module's design decisions inside its implementation |
+| information leakage | one design decision showing up in several modules |
+| temporal decomposition | structuring code by order of operations instead of knowledge |
+| general-purpose module | built for today's need but with a general interface |
+| pass-through method | a method that just forwards its arguments to another |
+| configuration parameter | a setting pushed onto the user instead of decided by the module |

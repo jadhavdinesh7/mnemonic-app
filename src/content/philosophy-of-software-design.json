@@ -5,7 +5,7 @@
     "subtitle": "A Philosophy of Software Design, John Ousterhout",
     "author": "A Philosophy of Software Design, John Ousterhout",
     "description": "Complexity is whatever makes a system hard to understand and change — and readers, not writers, are the judge.",
-    "readingTime": "13 min"
+    "readingTime": "22 min"
   },
   "sections": [
     {
@@ -532,6 +532,354 @@
       ]
     },
     {
+      "id": "S6",
+      "heading": "Information Hiding and Leakage",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> If deep modules are the goal, what is the main technique for making one?"
+        },
+        {
+          "type": "paragraph",
+          "text": "<strong>Information hiding</strong> is the main way to get deep modules: each module hides its design decisions inside its implementation, so they never appear in the interface. Because those decisions stay hidden, the interface gets simpler — and \"simpler interfaces tend to correlate with better information hiding.\" The opposite is <strong>information leakage</strong>: a design decision is reflected in multiple modules, so changing it means editing several places. One common cause is <strong>temporal decomposition</strong> — structuring code around the <em>order</em> things happen (read, then modify, then write) instead of around units of knowledge, which spreads one decision across many pieces."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Hide each design decision inside one module; when a decision shows up in several modules, that's leakage."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S6-01",
+              "question": "How does information hiding make a module deeper?",
+              "answer": "It keeps design decisions out of the interface, so the interface stays simple while the module does a lot. <span class=\"card-src\">(§5.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "5.1",
+                "quote": "Information hiding and deep modules are closely related"
+              },
+              "variants": [
+                "Why is information hiding the main technique for deep modules?"
+              ]
+            },
+            {
+              "id": "posd-S6-02",
+              "question": "What is \"information leakage\"?",
+              "answer": "When one design decision shows up in several modules, so a change forces edits in all of them. <span class=\"card-src\">(§5.2)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "5.2",
+                "quote": "design decision is reflected in multiple modules"
+              },
+              "variants": [
+                "Two classes both know a file's format. What design problem is that?"
+              ]
+            },
+            {
+              "id": "posd-S6-03",
+              "question": "Information hiding vs information leakage — state the difference in one line.",
+              "answer": "Hiding keeps a decision inside one module; leakage spreads the same decision across several. <span class=\"card-src\">(§5.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "5.1",
+                "quote": "simpler interfaces tend to correlate with better information hiding"
+              },
+              "variants": [
+                "What is the opposite of information hiding?"
+              ]
+            },
+            {
+              "id": "posd-S6-04",
+              "question": "What is \"temporal decomposition\", and why does it cause leakage?",
+              "answer": "Structuring code by the order of operations instead of by knowledge; one decision then spreads across the steps. <span class=\"card-src\">(§5.3)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "5.3",
+                "quote": "Temporal decomposition"
+              },
+              "variants": [
+                "Splitting code into read / modify / write classes risks which problem?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which design decision in your code is currently known by more than one module?"
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "heading": "General-Purpose Modules Are Deeper",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Should you build a module for exactly today's need, or for every possible future need?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ousterhout's answer is the middle: make modules <strong>somewhat general-purpose</strong>. The functionality should reflect your <em>current</em> needs, but the <em>interface</em> should be general enough to support more than one use. The surprising result is that a general-purpose interface is usually <em>simpler</em> (and so deeper) than a special-purpose one, because it offers a few powerful operations instead of many specific ones. To find the sweet spot he asks questions like \"What is the simplest interface that will cover all my current needs?\" And generality pays a bonus: it leads to better information hiding, because special-purpose knowledge is pushed up to the caller where it belongs."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Build for today's needs but with a general interface — it ends up simpler, deeper, and hides more."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S7-01",
+              "question": "What does \"somewhat general-purpose\" mean?",
+              "answer": "Implement for today's needs, but make the interface general enough to support other uses. <span class=\"card-src\">(§6.1)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "6.1",
+                "quote": "functionality should reflect your current needs"
+              },
+              "variants": [
+                "Where should a module be specific (functionality) and where general (interface)?"
+              ]
+            },
+            {
+              "id": "posd-S7-02",
+              "question": "Why is a general-purpose interface often simpler and deeper than a special-purpose one?",
+              "answer": "It offers a few powerful operations instead of many specific ones, so the interface is smaller. <span class=\"card-src\">(§6.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "6.1",
+                "quote": "somewhat general-purpose fashion"
+              },
+              "variants": [
+                "Replacing backspace/delete/deleteSelection with one delete(start,end) — why is that deeper?"
+              ]
+            },
+            {
+              "id": "posd-S7-03",
+              "question": "How does making a module more general-purpose improve information hiding?",
+              "answer": "Special-purpose knowledge moves up to the caller, so the module hides more inside. <span class=\"card-src\">(§6.4)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "6.4",
+                "quote": "Generality leads to better information hiding"
+              },
+              "variants": [
+                "Why does pushing special-case knowledge to the caller help hiding?"
+              ]
+            },
+            {
+              "id": "posd-S7-04",
+              "question": "What question does Ousterhout ask to find the right amount of generality?",
+              "answer": "\"What is the simplest interface that will cover all my current needs?\" <span class=\"card-src\">(§6.1)</span>",
+              "cardType": "procedure",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "6.1",
+                "quote": "simplest interface that will cover all my current needs"
+              },
+              "variants": [
+                "Name one test for whether an interface is general enough but not too general."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which special-purpose method in your code could become one simpler general operation?"
+        }
+      ]
+    },
+    {
+      "id": "S8",
+      "heading": "Different Layer, Different Abstraction",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> If two layers of your system look almost the same, is that good design?"
+        },
+        {
+          "type": "paragraph",
+          "text": "In a well-designed system, <strong>different layers provide different abstractions</strong>. If adjacent layers have the <em>same</em> abstraction, that's a red flag — the layers aren't earning their keep. The classic symptom is a <strong>pass-through method</strong>: a method that does almost nothing except pass its arguments to another method, usually with the same signature. Pass-through methods add interface (one more thing to learn) without adding functionality, so they make modules shallower. The fix is to give each layer a genuinely different job, or to remove the redundant layer."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Each layer should add a new abstraction; a method that just forwards its arguments is a warning sign."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S8-01",
+              "question": "What should adjacent layers of a system provide, and what's the warning sign?",
+              "answer": "Different abstractions. If two adjacent layers have the same abstraction, that's a red flag. <span class=\"card-src\">(§7)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "7",
+                "quote": "Different Layer, Different Abstraction"
+              },
+              "variants": [
+                "Two stacked layers with the same abstraction — what does that signal?"
+              ]
+            },
+            {
+              "id": "posd-S8-02",
+              "question": "What is a \"pass-through method\"?",
+              "answer": "A method that does little but pass its arguments on to another method with nearly the same signature. <span class=\"card-src\">(§7)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "7",
+                "quote": "pass its arguments to another"
+              },
+              "variants": [
+                "A method whose whole body just calls another method with the same args is called what?"
+              ]
+            },
+            {
+              "id": "posd-S8-03",
+              "question": "Why does a pass-through method make a module shallower, not deeper?",
+              "answer": "It adds interface to learn but no new functionality — cost without benefit, the opposite of depth. <span class=\"card-src\">(§7)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "7",
+                "quote": "pass-through method"
+              },
+              "variants": [
+                "How is a pass-through method the opposite of a deep module?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Is there a layer in your code that just forwards calls without adding anything?"
+        }
+      ]
+    },
+    {
+      "id": "S9",
+      "heading": "Pull Complexity Downwards",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> When some complexity is unavoidable, who should bear it — the module or its users?"
+        },
+        {
+          "type": "paragraph",
+          "text": "When complexity must exist somewhere, <strong>pull it downwards</strong>: handle it inside the module's implementation rather than exposing it through the interface. The reason is leverage — a module has many users but few developers, so it's better for one developer to absorb the complexity than for every user to. A good way to express the whole idea: \"it is more important for a module to have a simple interface than a simple implementation.\" A common violation is <strong>configuration parameters</strong> — instead of the module deciding a sensible value, it pushes the decision up to every user. Better to compute a reasonable default; if a module can adjust itself, that \"is better than exposing configuration parameters.\" Like all rules, this one can be taken too far, so use discretion."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Absorb complexity inside the module so users don't pay for it — a simple interface beats a simple implementation."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S9-01",
+              "question": "What does \"pull complexity downwards\" mean?",
+              "answer": "Handle unavoidable complexity inside the module's implementation instead of exposing it in the interface. <span class=\"card-src\">(§8)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "8",
+                "quote": "Pull Complexity Downwards"
+              },
+              "variants": [
+                "Where should you put complexity that has to exist somewhere?"
+              ]
+            },
+            {
+              "id": "posd-S9-02",
+              "question": "Why is it worth making the implementation harder to keep the interface simple?",
+              "answer": "A module has many users but few developers; one developer's pain saves every user's. <span class=\"card-src\">(§8)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "8",
+                "quote": "simple interface than a simple implementation"
+              },
+              "variants": [
+                "Simple interface or simple implementation — which matters more, and why?"
+              ]
+            },
+            {
+              "id": "posd-S9-03",
+              "question": "Why are configuration parameters often a sign of pushing complexity the wrong way?",
+              "answer": "They make every user decide a value the module should figure out itself; a sensible default is better. <span class=\"card-src\">(§8)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "8",
+                "quote": "better than exposing configuration parameters"
+              },
+              "variants": [
+                "A network library exposes a retry-timeout parameter. What's the better design?"
+              ]
+            },
+            {
+              "id": "posd-S9-04",
+              "question": "Can pulling complexity downward be taken too far?",
+              "answer": "Yes. Use discretion — cramming every hard case into one module can bloat it. Balance, not extremes. <span class=\"card-src\">(§8)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "8",
+                "quote": "can easily be overdone"
+              },
+              "variants": [
+                "What's the limit on pulling complexity down?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which config option in your code could be replaced by a sensible automatic default?"
+        }
+      ]
+    },
+    {
       "id": "glossary",
       "heading": "Glossary",
       "content": [
@@ -547,7 +895,13 @@
             "<strong>interface</strong> — everything you must know to use a module",
             "<strong>deep module</strong> — simple interface hiding powerful functionality",
             "<strong>shallow module</strong> — interface almost as complex as what it does",
-            "<strong>classitis</strong> — the mistaken belief that more, smaller classes are always better"
+            "<strong>classitis</strong> — the mistaken belief that more, smaller classes are always better",
+            "<strong>information hiding</strong> — hiding a module's design decisions inside its implementation",
+            "<strong>information leakage</strong> — one design decision showing up in several modules",
+            "<strong>temporal decomposition</strong> — structuring code by order of operations instead of knowledge",
+            "<strong>general-purpose module</strong> — built for today's need but with a general interface",
+            "<strong>pass-through method</strong> — a method that just forwards its arguments to another",
+            "<strong>configuration parameter</strong> — a setting pushed onto the user instead of decided by the module"
           ]
         }
       ]
