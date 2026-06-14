@@ -506,6 +506,194 @@ When complexity must exist somewhere, **pull it downwards**: handle it inside th
 
 *Reflect:* Which config option in your code could be replaced by a sensible automatic default?
 
+## S10. Better Together or Better Apart?
+
+*Before you read:* When should two pieces of code live together, and when should they be split?
+
+Deciding whether to combine or separate code is a constant design question. Ousterhout gives clear reasons to **bring code together**: bring it together if information is shared, if it will simplify the interface, or to eliminate duplication. But some things belong **apart** — in particular, separate general-purpose code from special-purpose code. Mixing them is a red flag he calls the **special-general mixture**: general code tangled with the special case of one particular use, which makes both harder to reuse and understand.
+
+**In short:** Combine code that shares information or removes duplication; keep general-purpose and special-purpose code apart.
+
+#### Try to recall — S10
+
+> [!card] posd-S10-01 | list | recall | - | - | 9.1 "Bring together if information is shared"
+> **Q:** Name two reasons Ousterhout gives to bring pieces of code together.
+> <details><summary>Answer</summary>
+>
+> They share information, it simplifies the interface, or it eliminates duplication (any two).
+>
+> </details>
+>
+> **V1:** Give one reason to combine two chunks of code rather than separate them.
+
+> [!card] posd-S10-02 | concept | recall | mechanism | - | 9.3 "Bring together to eliminate duplication"
+> **Q:** How does bringing code together help with duplication?
+> <details><summary>Answer</summary>
+>
+> A repeated snippet is refactored so it lives and runs in just one place.
+>
+> </details>
+>
+> **V1:** Why combine code that currently repeats the same logic?
+
+> [!card] posd-S10-03 | concept | recall | contrast | - | 9.4 "Separate general-purpose and special-purpose code"
+> **Q:** What kind of code should be kept apart, not combined?
+> <details><summary>Answer</summary>
+>
+> General-purpose code should be separated from special-purpose code.
+>
+> </details>
+>
+> **V1:** Combining is good — but which two kinds of code should stay separate?
+
+> [!card] posd-S10-04 | concept | recall | failure | - | 9 "Special-General Mixture"
+> **Q:** What is the "special-general mixture" red flag?
+> <details><summary>Answer</summary>
+>
+> General-purpose code tangled with the special case of one particular use; split them apart.
+>
+> </details>
+>
+> **V1:** A reusable class stuffed with one caller's special case — which red flag is that?
+
+*Reflect:* Where in your code is general logic tangled with one caller's special case?
+
+## S11. Define Errors Out of Existence
+
+*Before you read:* Exceptions feel responsible to throw — but could they be making your code worse?
+
+Exception handling is a major source of complexity. Ousterhout's boldest advice: rather than defining lots of exceptions and then handling them, **define errors out of existence** — redefine the operation so the error case simply can't happen. (Unix's `unlink` always succeeds, even on an open file; the "file in use" error is gone.) The same idea extends to defining other special cases out of existence. When errors can't be removed, two techniques reduce their cost: **exception masking** — handle the exception low down so callers never see it (TCP quietly resends lost packets) — and **exception aggregation** — handle many exceptions with a single piece of code instead of many scattered handlers.
+
+**In short:** Best, redefine operations so errors can't occur; otherwise mask them low down or aggregate them into one handler.
+
+#### Try to recall — S11
+
+> [!card] posd-S11-01 | concept | recall | mechanism | - | 10 "define errors out of existence"
+> **Q:** What does "define errors out of existence" mean?
+> <details><summary>Answer</summary>
+>
+> Redefine the operation's meaning so the error case simply cannot happen — nothing to throw or handle.
+>
+> </details>
+>
+> **V1:** Instead of catching an error, what does Ousterhout suggest doing to it?
+
+> [!card] posd-S11-02 | concept | recall | matters | - | 10 "special cases out of existence"
+> **Q:** Unix `unlink` always succeeds even if the file is open. Which principle is that?
+> <details><summary>Answer</summary>
+>
+> Defining errors (special cases) out of existence — the "file in use" failure no longer exists.
+>
+> </details>
+>
+> **V1:** A delete that can't fail because "already gone" counts as done — which idea is that?
+
+> [!card] posd-S11-03 | definition | recall | - | - | 10 "Exception masking"
+> **Q:** What is "exception masking"?
+> <details><summary>Answer</summary>
+>
+> Handling an exception low in the system so higher-level code never has to see it.
+>
+> </details>
+>
+> **V1:** TCP silently resends a lost packet so callers never notice. That's which technique?
+
+> [!card] posd-S11-04 | concept | recall | contrast | - | 10 "exception aggregation"
+> **Q:** How does exception aggregation differ from exception masking?
+> <details><summary>Answer</summary>
+>
+> Masking hides one exception low down; aggregation handles many exceptions with a single shared handler.
+>
+> </details>
+>
+> **V1:** One handler for many different exceptions instead of catching each — which technique?
+
+*Reflect:* Which error in your code could you redefine away instead of handling everywhere?
+
+## S12. Design It Twice
+
+*Before you read:* If your first design idea works, is it worth thinking of another?
+
+One of the simplest high-value habits: **design it twice**. For any major design decision, consider multiple, *radically different* options before committing — not small variations, but genuinely different approaches. Comparing them sharpens your understanding of the trade-offs and often produces a hybrid better than any single starting idea. The habit fights a common trap: implementing the first idea that comes to mind, on the belief that capable people get it right the first time. Software design is hard enough that almost no one does.
+
+**In short:** For big decisions, sketch two very different designs and compare — your first idea is rarely your best.
+
+#### Try to recall — S12
+
+> [!card] posd-S12-01 | definition | recall | - | - | 11 "consider multiple options for each major design"
+> **Q:** What does "design it twice" advise, and how different should the options be?
+> <details><summary>Answer</summary>
+>
+> Consider multiple options for each major decision — radically different ones, not minor variations.
+>
+> </details>
+>
+> **V1:** Before committing to a design, what does Ousterhout tell you to do?
+
+> [!card] posd-S12-02 | concept | recall | mechanism | - | 11 "design it twice"
+> **Q:** Why design it twice even if your first idea seems good enough?
+> <details><summary>Answer</summary>
+>
+> Comparing very different options reveals the trade-offs and often yields a better hybrid.
+>
+> </details>
+>
+> **V1:** What's the benefit of comparing a second, very different design?
+
+> [!card] posd-S12-03 | concept | recall | failure | - | 11 "consider multiple options for each major design"
+> **Q:** What habit does "design it twice" push against?
+> <details><summary>Answer</summary>
+>
+> Building the first idea that comes to mind, assuming smart people get it right first try.
+>
+> </details>
+>
+> **V1:** What mistaken belief makes people skip considering alternatives?
+
+*Reflect:* What recent design decision did you make from only your first idea?
+
+## S13. Comments: Capture What the Code Can't
+
+*Before you read:* If good code is "self-documenting," why write comments at all?
+
+Comments exist to record what code cannot. Ousterhout: the overall idea is to **capture information that was in the mind of the designer** but couldn't be represented in the code — the *why*, the constraints, the units, the intent. The guiding rule for *what* to write: comments should describe **things that are not obvious from the code**. The most common mistake is the opposite — comments that simply **repeat the code**, restating what the line next to them already says, which adds noise without information.
+
+**In short:** Write comments for what the code can't show; never just restate the code.
+
+#### Try to recall — S13
+
+> [!card] posd-S13-01 | concept | recall | mechanism | - | 12 "in the mind of the designer"
+> **Q:** What is the overall purpose of a comment?
+> <details><summary>Answer</summary>
+>
+> To capture what was in the designer's mind but couldn't be expressed in the code.
+>
+> </details>
+>
+> **V1:** What information should a comment preserve that code can't?
+
+> [!card] posd-S13-02 | concept | recall | matters | - | 13 "not obvious from the code"
+> **Q:** What is the guiding rule for what a comment should describe?
+> <details><summary>Answer</summary>
+>
+> Things that are not obvious from the code itself.
+>
+> </details>
+>
+> **V1:** A good comment adds information that you can't get from where?
+
+> [!card] posd-S13-03 | concept | recall | failure | - | 13 "comments repeat the code"
+> **Q:** What is the most common commenting mistake?
+> <details><summary>Answer</summary>
+>
+> Comments that repeat the code — restating what the adjacent line already makes obvious.
+>
+> </details>
+>
+> **V1:** A comment you could delete because the code says the same thing — what mistake is that?
+
+*Reflect:* Find one comment in your code that just repeats the code — what should it say instead?
+
 ## Glossary
 
 | term | plain English |
@@ -526,3 +714,8 @@ When complexity must exist somewhere, **pull it downwards**: handle it inside th
 | general-purpose module | built for today's need but with a general interface |
 | pass-through method | a method that just forwards its arguments to another |
 | configuration parameter | a setting pushed onto the user instead of decided by the module |
+| special-general mixture | general-purpose code tangled with one caller's special case |
+| define errors out of existence | redefine an operation so the error case can't happen |
+| exception masking | handling an exception low so callers never see it |
+| exception aggregation | handling many exceptions with one shared handler |
+| design it twice | compare two radically different designs before choosing |
