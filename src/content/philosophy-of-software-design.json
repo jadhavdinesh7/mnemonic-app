@@ -1,0 +1,556 @@
+{
+  "id": "philosophy-of-software-design",
+  "meta": {
+    "title": "A Philosophy of Software Design",
+    "subtitle": "A Philosophy of Software Design, John Ousterhout",
+    "author": "A Philosophy of Software Design, John Ousterhout",
+    "description": "Complexity is whatever makes a system hard to understand and change — and readers, not writers, are the judge.",
+    "readingTime": "13 min"
+  },
+  "sections": [
+    {
+      "id": "S1",
+      "heading": "The Fight Against Complexity",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> What makes one program \"complex\" and another \"simple\" — is it size?"
+        },
+        {
+          "type": "paragraph",
+          "text": "All of software design comes down to one fight: the fight against <strong>complexity</strong>. Ousterhout argues that \"the greatest limitation in writing software is our ability to understand the systems we are creating.\" There are two broad ways to fight back: <strong>eliminate</strong> complexity by making code simpler and more obvious, and <strong>encapsulate</strong> it — hide it inside independent pieces. That second approach is called <strong>modular design</strong>."
+        },
+        {
+          "type": "paragraph",
+          "text": "He defines the enemy precisely. <strong>Complexity is anything about the structure of a system that makes it hard to understand and change.</strong> It is <em>not</em> about size: a tiny program can be deeply complex, and a huge one can be simple. And complexity is judged by the reader, not the author — if others find your code confusing, it is complex, even if it feels clear to you."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Complexity is whatever makes a system hard to understand and change — and readers, not writers, are the judge."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S1-01",
+              "question": "How does Ousterhout define complexity?",
+              "answer": "Anything about a system's structure that makes it hard to understand and change. <span class=\"card-src\">(§2.1)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.1",
+                "quote": "hard to understand and modify the system"
+              },
+              "variants": [
+                "In one phrase, what counts as \"complexity\" in this book?"
+              ]
+            },
+            {
+              "id": "posd-S1-02",
+              "question": "A 200-line module with tangled flags vs a clean 5,000-line one — which is more complex, and why?",
+              "answer": "The small one. Complexity is about how hard it is to understand and change, not size. <span class=\"card-src\">(§2.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "2.1",
+                "quote": "small and unsophisticated system to be quite complex"
+              },
+              "variants": [
+                "Can a tiny program be more complex than a large one?"
+              ]
+            },
+            {
+              "id": "posd-S1-03",
+              "question": "Your code feels simple to you, but teammates find it confusing. Who decides if it's complex?",
+              "answer": "They do. Complexity is more apparent to readers than writers — their confusion is the real signal. <span class=\"card-src\">(§2.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "2.1",
+                "quote": "more apparent to readers than writers"
+              },
+              "variants": [
+                "Is \"it's obvious to me\" a good defense against a complexity complaint?"
+              ]
+            },
+            {
+              "id": "posd-S1-04",
+              "question": "What are Ousterhout's two general approaches to fighting complexity?",
+              "answer": "Eliminate it (make code simpler and more obvious) and encapsulate it (modular design). <span class=\"card-src\">(§1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "1",
+                "quote": "making code simpler and more obvious"
+              },
+              "variants": [
+                "Besides making code simpler, what is the other way to fight complexity?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Where in your current project do small \"simple\" pieces of code feel hardest to change?"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "heading": "The Three Symptoms of Complexity",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> How would you <em>notice</em> that a codebase has become complex?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Complexity shows itself in three ways. <strong>Change amplification:</strong> a seemingly simple change requires edits in many different places. <strong>Cognitive load:</strong> how much a developer must hold in their head to finish a task. <strong>Unknown unknowns:</strong> it is not even obvious what you need to know or change — the most dangerous kind, because you only discover the problem when a bug appears later. Change amplification is annoying but visible; cognitive load is heavy but known; unknown unknowns are silent."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Complexity appears as change amplification, cognitive load, and the worst one — unknown unknowns."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S2-01",
+              "question": "Name the three symptoms of complexity: change amplification, ____, and unknown unknowns.",
+              "answer": "Cognitive load. <span class=\"card-src\">(§2.2)</span>",
+              "cardType": "list",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.2",
+                "quote": "Change amplification"
+              },
+              "variants": [
+                "The three symptoms are change amplification, unknown unknowns, and what third one?"
+              ]
+            },
+            {
+              "id": "posd-S2-02",
+              "question": "What is \"change amplification\"?",
+              "answer": "When a small change forces code edits in many different places. <span class=\"card-src\">(§2.2)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.2",
+                "quote": "code modifications in many different places"
+              },
+              "variants": [
+                "You change one color and must edit fifty files. Which symptom is that?"
+              ]
+            },
+            {
+              "id": "posd-S2-03",
+              "question": "What does \"cognitive load\" measure?",
+              "answer": "How much a developer needs to know to complete a task. <span class=\"card-src\">(§2.2)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.2",
+                "quote": "how much a developer needs to know"
+              },
+              "variants": [
+                "A function that makes the caller remember to free memory increases what?"
+              ]
+            },
+            {
+              "id": "posd-S2-04",
+              "question": "Why are \"unknown unknowns\" the worst symptom of complexity?",
+              "answer": "You don't know what you must change or know, so you only find out when a bug appears. <span class=\"card-src\">(§2.2)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "2.2",
+                "quote": "unknown unknowns are the worst"
+              },
+              "variants": [
+                "Which symptom can't even be seen until something breaks, and why?"
+              ]
+            },
+            {
+              "id": "posd-S2-05",
+              "question": "A change is tedious across many files but you can see exactly which ones. Which symptom — and why not \"unknown unknowns\"?",
+              "answer": "Change amplification. It's visible and clear; unknown unknowns are hidden until they bite. <span class=\"card-src\">(§2.2)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "2.2",
+                "quote": "Change amplification is annoying"
+              },
+              "variants": [
+                "How is change amplification less dangerous than unknown unknowns?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which of the three symptoms slows you down most in your own work?"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "heading": "The Two Causes — and Why Complexity Creeps In",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> If those are the symptoms, what actually <em>causes</em> complexity?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Complexity has exactly two causes: <strong>dependencies</strong> and <strong>obscurity</strong>. A <strong>dependency</strong> exists when a piece of code cannot be understood or changed on its own — it relates to other code that must be considered or changed too. <strong>Obscurity</strong> is when important information is not obvious — a vague name like <code>time</code>, or an undocumented rule. The mapping is neat: dependencies cause change amplification and cognitive load; obscurity creates unknown unknowns. And complexity is <strong>incremental</strong> — it accumulates in lots of small chunks, each one looking harmless, until the system is a swamp. That is why good design needs a \"zero tolerance\" attitude."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Complexity is caused by dependencies and obscurity, piling up in tiny harmless-looking steps."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S3-01",
+              "question": "What are the two causes of complexity?",
+              "answer": "Dependencies and obscurity. <span class=\"card-src\">(§2.3)</span>",
+              "cardType": "list",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.3",
+                "quote": "dependencies and obscurity"
+              },
+              "variants": [
+                "Complexity comes from obscurity and what other root cause?"
+              ]
+            },
+            {
+              "id": "posd-S3-02",
+              "question": "What is a \"dependency\" in Ousterhout's sense?",
+              "answer": "When code can't be understood or changed on its own because it ties to other code. <span class=\"card-src\">(§2.3)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "2.3",
+                "quote": "cannot be understood and modified in isolation"
+              },
+              "variants": [
+                "Sender and receiver code that must change together is an example of what?"
+              ]
+            },
+            {
+              "id": "posd-S3-03",
+              "question": "What is \"obscurity\", and how is it different from a dependency?",
+              "answer": "Obscurity is when important information isn't obvious. A dependency links code; obscurity hides information. <span class=\"card-src\">(§2.3)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "2.3",
+                "quote": "important information is not obvious"
+              },
+              "variants": [
+                "A variable named <code>time</code> with no units shown — which cause of complexity is that?"
+              ]
+            },
+            {
+              "id": "posd-S3-04",
+              "question": "Which symptoms do dependencies cause, and which does obscurity cause?",
+              "answer": "Dependencies cause change amplification and cognitive load; obscurity creates unknown unknowns. <span class=\"card-src\">(§2.3)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "2.3",
+                "quote": "Dependencies lead to change amplification"
+              },
+              "variants": [
+                "Unknown unknowns come mainly from which of the two causes?"
+              ]
+            },
+            {
+              "id": "posd-S3-05",
+              "question": "Why does Ousterhout say complexity is \"incremental\", and what attitude does that demand?",
+              "answer": "It builds up from many tiny, harmless-looking bits, so you need a zero-tolerance attitude. <span class=\"card-src\">(§2.4)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "2.4",
+                "quote": "accumulates in lots of small chunks"
+              },
+              "variants": [
+                "Why isn't \"just one small hack\" actually harmless?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> What is one \"small hack\" in your codebase you've been telling yourself is harmless?"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "heading": "Working Code Isn't Enough",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Is code that passes all tests \"good enough\"? Why might that not be true?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ousterhout contrasts two mindsets. <strong>Tactical</strong> programming: your main focus is to get something working — ship the feature, fix the bug, hit the deadline. It feels productive but quietly adds complexity with every shortcut. (The extreme is the <strong>tactical tornado</strong>: someone who produces code fast but leaves a mess others must clean up.) <strong>Strategic</strong> programming: your primary goal is to produce a <em>great design</em> that also happens to work. It takes an investment mindset — he suggests spending about 10–20% of your development time improving the design. That investment slows you slightly now and pays back later, because clean systems stay fast to change."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Don't just make it work — invest ~10–20% in good design, or complexity wins over time."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S4-01",
+              "question": "What is the main goal of a \"tactical\" programmer?",
+              "answer": "Just to get something working quickly; design comes second. <span class=\"card-src\">(§3.1)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "3.1",
+                "quote": "get something working"
+              },
+              "variants": [
+                "\"A small kludge here to hit the deadline\" — which mindset is that?"
+              ]
+            },
+            {
+              "id": "posd-S4-02",
+              "question": "In \"strategic\" programming, what is the primary goal — and how does it differ from tactical?",
+              "answer": "To produce a great design that also works. Tactical settles for merely working. <span class=\"card-src\">(§3.2)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "3.2",
+                "quote": "produce a great design"
+              },
+              "variants": [
+                "What does a strategic programmer aim for beyond \"it works\"?"
+              ]
+            },
+            {
+              "id": "posd-S4-03",
+              "question": "How much development time does Ousterhout suggest investing in design?",
+              "answer": "About 10–20%, spread out as small continuous investments. <span class=\"card-src\">(§3.3)</span>",
+              "cardType": "fact",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "3.3",
+                "quote": "your total development time on investments"
+              },
+              "variants": [
+                "What fraction of your time should go to ongoing design improvement?"
+              ]
+            },
+            {
+              "id": "posd-S4-04",
+              "question": "What is a \"tactical tornado\"?",
+              "answer": "A prolific coder who ships fast but leaves a mess others must clean up. <span class=\"card-src\">(§3.1)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "3.1",
+                "quote": "tactical tornado"
+              },
+              "variants": [
+                "Who looks like a hero for shipping fast but creates work for everyone after?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Where could you spend 10–20% more time on design this week without missing your deadline?"
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "heading": "Modules Should Be Deep",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> What makes a class or function genuinely <em>good</em> to use?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every module (a class, function, or service) has two parts: an <strong>interface</strong> (everything you must know to use it) and an <strong>implementation</strong> (how it does its job). A module is a good <strong>abstraction</strong> — a simplified view that omits unimportant details. A <strong>deep</strong> module provides powerful functionality through a simple interface: lots of benefit, little cost. The classic example is Unix file I/O — five basic system calls hide a huge implementation. A <strong>shallow</strong> module is the opposite: its interface is about as complex as what it provides, so it hides almost nothing. Ousterhout warns against <strong>classitis</strong> — the belief that more, smaller classes are always better, which piles up interface complexity. Java's I/O (FileInputStream → BufferedInputStream → ObjectInputStream just to read a file) is his shallow counter-example."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> The best modules are deep — a simple interface hiding powerful functionality; shallow modules and \"classitis\" do the reverse."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S5-01",
+              "question": "What are the two parts of any module?",
+              "answer": "Its interface (what you must know to use it) and its implementation (how it works). <span class=\"card-src\">(§4.1)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": "parts",
+              "parent": null,
+              "anchor": {
+                "ref": "4.1",
+                "quote": "an interface and an implementation"
+              },
+              "variants": [
+                "A module is divided into which two parts?"
+              ]
+            },
+            {
+              "id": "posd-S5-02",
+              "question": "What makes a module \"deep\"?",
+              "answer": "A simple interface that hides powerful functionality — much benefit for little cost. <span class=\"card-src\">(§4.4)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "4.4",
+                "quote": "powerful functionality yet have simple interfaces"
+              },
+              "variants": [
+                "Five tiny calls hiding 100,000 lines — what kind of module is that?"
+              ]
+            },
+            {
+              "id": "posd-S5-03",
+              "question": "What is a \"shallow\" module, and why doesn't it help fight complexity?",
+              "answer": "Its interface is nearly as complex as what it does, so it hides almost nothing. <span class=\"card-src\">(§4.5)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "4.5",
+                "quote": "interface is relatively complex in comparison"
+              },
+              "variants": [
+                "Why is a class whose interface is as big as its behavior unhelpful?"
+              ]
+            },
+            {
+              "id": "posd-S5-04",
+              "question": "What is an abstraction, and when is it a \"false\" abstraction?",
+              "answer": "A simplified view that omits unimportant details; false when it hides details that actually matter. <span class=\"card-src\">(§4.3)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "4.3",
+                "quote": "simplified view of an entity"
+              },
+              "variants": [
+                "An abstraction that leaves out something important is called what?"
+              ]
+            },
+            {
+              "id": "posd-S5-05",
+              "question": "What is \"classitis\", and why is it harmful?",
+              "answer": "The wrong belief that more, smaller classes are always better; their interfaces pile up complexity. <span class=\"card-src\">(§4.6)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "4.6",
+                "quote": "classes are good, so more classes are better"
+              },
+              "variants": [
+                "What disease does \"classes are good, so more classes are better\" describe?"
+              ]
+            },
+            {
+              "id": "posd-S5-06",
+              "question": "Unix I/O uses 5 calls; Java needs three wrapped classes to read a file. Which is deeper, and why?",
+              "answer": "Unix — a tiny interface hiding huge complexity. Java's I/O is shallow: complex interface, little hidden. <span class=\"card-src\">(§4.4)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "4.4",
+                "quote": "five basic system calls for I/O"
+              },
+              "variants": [
+                "Which is the deep design — Unix's five calls or Java's stream wrappers?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which module in your code has an interface almost as complicated as what it does?"
+        }
+      ]
+    },
+    {
+      "id": "glossary",
+      "heading": "Glossary",
+      "content": [
+        {
+          "type": "list",
+          "items": [
+            "<strong>complexity</strong> — anything that makes a system hard to understand or change",
+            "<strong>change amplification</strong> — one small change forces edits in many places",
+            "<strong>cognitive load</strong> — how much you must keep in your head to do a task",
+            "<strong>unknown unknowns</strong> — you don't even know what you need to know or change",
+            "<strong>dependency</strong> — code that can't be understood or changed on its own",
+            "<strong>obscurity</strong> — important information that isn't obvious",
+            "<strong>interface</strong> — everything you must know to use a module",
+            "<strong>deep module</strong> — simple interface hiding powerful functionality",
+            "<strong>shallow module</strong> — interface almost as complex as what it does",
+            "<strong>classitis</strong> — the mistaken belief that more, smaller classes are always better"
+          ]
+        }
+      ]
+    }
+  ]
+}

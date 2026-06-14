@@ -14,11 +14,48 @@ import {
 
 import { aboutEssay } from './about-mnemonic-medium.js';
 
+// Pipeline-generated essays (authoring/ -> tools/md-to-content.mjs -> JSON).
+import posdDeep from './philosophy-of-software-design.json';
+
+// ============================================================
+// JSON essay adapter
+// ============================================================
+
+/**
+ * Wrap a converter-produced JSON essay into the same interface the app uses for
+ * hand-written essays. Card scan logic mirrors getAllCards/getAllCardIds in
+ * philosophy-of-software-design.js so both kinds of essay behave identically.
+ */
+export function essayFromJson(json) {
+    const cardsWithMeta = () => {
+        const out = [];
+        for (const section of json.sections) {
+            for (const block of section.content) {
+                if (block.type === 'cards') {
+                    for (const card of block.cards) {
+                        out.push({ ...card, sectionId: section.id, sectionHeading: section.heading });
+                    }
+                }
+            }
+        }
+        return out;
+    };
+    const getCardIds = () => cardsWithMeta().map(c => c.id);
+    return {
+        id: json.id,
+        meta: { ...json.meta, cardCount: getCardIds().length },
+        sections: json.sections,
+        getCardIds,
+        getCards: cardsWithMeta,
+    };
+}
+
 // ============================================================
 // Essay definitions
 // ============================================================
 
 export const essays = [
+    essayFromJson(posdDeep),
     {
         id: 'philosophy-software-design',
         meta: philosophyMeta,
