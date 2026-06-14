@@ -694,6 +694,252 @@ Comments exist to record what code cannot. Ousterhout: the overall idea is to **
 
 *Reflect:* Find one comment in your code that just repeats the code — what should it say instead?
 
+## S14. The Power of Names
+
+*Before you read:* Can a bad variable name actually cause a bug?
+
+Names are quietly one of the most important tools in design. **Good names are a form of documentation**: a precise name tells the reader what something is without forcing them into the implementation. Ousterhout's rule is that **names should be precise** and consistent — the same name always means the same thing. The red flag is a name that is **too vague** (`data`, `result`, `tmp`, `obj`): broad enough to mean almost anything, so it carries no information and invites mistakes.
+
+**In short:** Precise, consistent names are documentation; vague names hide information and cause bugs.
+
+#### Try to recall — S14
+
+> [!card] posd-S14-01 | concept | recall | mechanism | - | 14 "Good names are a form of documentation"
+> **Q:** Why does Ousterhout call good names "a form of documentation"?
+> <details><summary>Answer</summary>
+>
+> A precise name tells the reader what something is, so they don't have to read the implementation.
+>
+> </details>
+>
+> **V1:** How can a name do the job of a comment?
+
+> [!card] posd-S14-02 | concept | recall | failure | - | 14 "too vague"
+> **Q:** What is the red flag with names like `data`, `tmp`, or `result`?
+> <details><summary>Answer</summary>
+>
+> They're too vague — broad enough to mean anything, so they carry no real information.
+>
+> </details>
+>
+> **V1:** Why is a name that could fit many different things a problem?
+
+*Reflect:* Which vague name in your code (`data`, `info`, `tmp`...) is hiding what it really holds?
+
+## S15. Write the Comments First
+
+*Before you read:* When in the coding process should you write comments — before or after?
+
+Ousterhout's surprising advice: **write the comments first** — use **comments as part of the design process**, not an afterthought. You write the interface comment for a class or method *before* writing its code. If the comment is hard to write or comes out long and awkward, that's an early signal the design is too complicated — so you fix the design before sinking time into code. Writing comments last, by contrast, makes them a chore you rush, and misses this design feedback.
+
+**In short:** Write the interface comment first; if it's hard to write, the design is probably wrong.
+
+#### Try to recall — S15
+
+> [!card] posd-S15-01 | concept | recall | mechanism | - | 15 "comments as part of the design process"
+> **Q:** What is the benefit of writing comments *first*, before the code?
+> <details><summary>Answer</summary>
+>
+> A comment that's hard or awkward to write reveals a bad design early, before you write the code.
+>
+> </details>
+>
+> **V1:** How does writing the comment first give you design feedback?
+
+> [!card] posd-S15-02 | concept | recall | contrast | - | 15 "Write the comments first"
+> **Q:** Why is writing comments first better than writing them last?
+> <details><summary>Answer</summary>
+>
+> Done last, comments become a rushed chore; done first, they guide and test the design.
+>
+> </details>
+>
+> **V1:** What goes wrong when comments are left until after the code?
+
+*Reflect:* Pick a method you're about to write — could you write its comment first?
+
+## S16. Modifying Existing Code
+
+*Before you read:* When you change existing code, what's your responsibility to its design?
+
+The strategic mindset (Chapter 3) doesn't stop after the first version — it applies to every change. When modifying existing code, **stay strategic**: each change is a chance to improve the system's design, not just to bolt on a feature. Ousterhout's warning is blunt: "if you're not making the design better, you are probably **making it worse**." Tactical patches during maintenance are how clean systems rot over time.
+
+**In short:** Every change should leave the design better; if it doesn't, it's probably making it worse.
+
+#### Try to recall — S16
+
+> [!card] posd-S16-01 | concept | recall | mechanism | - | 16 "stay strategic"
+> **Q:** What is your design responsibility when modifying existing code?
+> <details><summary>Answer</summary>
+>
+> Stay strategic — use each change as a chance to leave the system's design a little better.
+>
+> </details>
+>
+> **V1:** How should the strategic mindset apply during maintenance, not just new code?
+
+> [!card] posd-S16-02 | concept | recall | failure | - | 16 "making it worse"
+> **Q:** What does Ousterhout say happens if a change doesn't improve the design?
+> <details><summary>Answer</summary>
+>
+> You are probably making it worse — tactical patches slowly rot a clean system.
+>
+> </details>
+>
+> **V1:** Why is a "quick patch" during maintenance dangerous?
+
+*Reflect:* Did your last code change leave the design better or worse?
+
+## S17. Consistency
+
+*Before you read:* Why might doing things the "same boring way" everywhere be a strength?
+
+**Consistency is a powerful tool** for reducing complexity. When **similar things are done in similar ways**, a reader who learns one part of the system can immediately understand others — and **consistency reduces mistakes**, because behavior matches expectations. It cuts both ways: dissimilar things should look *different*, so readers aren't misled. Names, coding style, interfaces, and design patterns should all be applied consistently across a codebase.
+
+**In short:** Do similar things the same way everywhere; it lowers cognitive load and prevents mistakes.
+
+#### Try to recall — S17
+
+> [!card] posd-S17-01 | definition | recall | - | - | 17 "similar things are done in similar ways"
+> **Q:** What does "consistency" mean in design?
+> <details><summary>Answer</summary>
+>
+> Similar things are done in similar ways, and dissimilar things in different ways.
+>
+> </details>
+>
+> **V1:** State the rule of consistency in one sentence.
+
+> [!card] posd-S17-02 | concept | recall | mechanism | - | 17 "Consistency is a powerful tool"
+> **Q:** How does consistency reduce complexity?
+> <details><summary>Answer</summary>
+>
+> Learn one part and you understand the rest; behavior matches expectations, so mistakes drop.
+>
+> </details>
+>
+> **V1:** Why does a consistent codebase lower cognitive load?
+
+*Reflect:* Where does your codebase do the same kind of thing in two different ways?
+
+## S18. Code Should Be Obvious
+
+*Before you read:* What single quality, above cleverness or brevity, marks well-written code?
+
+The opposite of obscurity is obviousness, and it is the quality to aim for. **If code is obvious**, a reader can quickly understand what it does without much time or effort — they can guess correctly and move on. Obscure code is the reverse: it makes readers stop, puzzle, and guess wrong, which is exactly how unknown unknowns and bugs creep in. Obviousness comes from good names, consistency, sensible comments, and not surprising the reader.
+
+**In short:** Aim for obvious code — a reader understands it fast; obscurity is the enemy.
+
+#### Try to recall — S18
+
+> [!card] posd-S18-01 | concept | recall | mechanism | - | 18 "If code is obvious"
+> **Q:** What does it mean for code to be "obvious"?
+> <details><summary>Answer</summary>
+>
+> A reader can understand what it does quickly, with little time or effort, and guess right.
+>
+> </details>
+>
+> **V1:** What's the test for whether code is "obvious"?
+
+> [!card] posd-S18-02 | concept | recall | contrast | - | 18 "Code Should be Obvious"
+> **Q:** How is obscure code the opposite of obvious code, and why is it dangerous?
+> <details><summary>Answer</summary>
+>
+> Obscure code makes readers puzzle and guess wrong — the source of unknown unknowns and bugs.
+>
+> </details>
+>
+> **V1:** Why is obscurity, not difficulty, the real enemy when reading code?
+
+*Reflect:* Which file in your project do new readers always have to puzzle over?
+
+## S19. A Word on Software Trends
+
+*Before you read:* Are popular practices like TDD and design patterns always good?
+
+Ousterhout judges trends by one test: do they reduce complexity? **Design patterns** are useful, but their biggest risk is over-application — forcing a pattern where a simpler solution would do adds complexity. He's also critical of **test-driven development**: its problem is that it focuses attention on getting specific features working "rather than **finding the best design**." The lesson isn't to reject these tools, but to use them only when they genuinely make the system simpler.
+
+**In short:** Judge any trend by whether it reduces complexity — patterns and TDD included.
+
+#### Try to recall — S19
+
+> [!card] posd-S19-01 | concept | recall | contrast | - | 19 "finding the best design"
+> **Q:** What is Ousterhout's main criticism of test-driven development?
+> <details><summary>Answer</summary>
+>
+> It focuses on getting specific features working rather than finding the best design.
+>
+> </details>
+>
+> **V1:** Why is TDD's focus on passing tests a design risk?
+
+> [!card] posd-S19-02 | concept | recall | failure | - | 19 "design patterns"
+> **Q:** What is the biggest risk in using design patterns?
+> <details><summary>Answer</summary>
+>
+> Over-application — forcing a pattern where a simpler solution would add less complexity.
+>
+> </details>
+>
+> **V1:** When does reaching for a design pattern make things worse?
+
+*Reflect:* Which practice do you follow out of habit rather than because it reduces complexity?
+
+## S20. Designing for Performance
+
+*Before you read:* Does writing fast code mean writing complicated code?
+
+Performance and clean design are not enemies. The most important idea is still simplicity: simpler code "**usually makes systems faster**," because there's less work to do. When you do need speed, the key is to **design the code around the critical path** — the minimum work that must happen in the most common case — and keep that path lean, rather than scattering micro-optimizations everywhere.
+
+**In short:** Simplicity usually means speed; when optimizing, design around the critical path.
+
+#### Try to recall — S20
+
+> [!card] posd-S20-01 | concept | recall | contrast | - | 20 "usually makes systems faster"
+> **Q:** What's the relationship between simplicity and performance?
+> <details><summary>Answer</summary>
+>
+> They usually agree — simpler code has less work to do, so it usually runs faster.
+>
+> </details>
+>
+> **V1:** Does clean design normally cost you speed?
+
+> [!card] posd-S20-02 | concept | recall | mechanism | - | 20 "design the code around the critical path"
+> **Q:** When you do need to optimize, what's the key approach?
+> <details><summary>Answer</summary>
+>
+> Design around the critical path — the minimum code that must run in the common case — and keep it lean.
+>
+> </details>
+>
+> **V1:** Instead of micro-optimizing everywhere, what should you focus on?
+
+*Reflect:* Do you know the actual critical path of your system, or are you guessing?
+
+## S21. The Whole Philosophy
+
+*Before you read:* What single thread ties every chapter of this book together?
+
+Every idea in the book serves one goal: reducing **complexity** so software stays easy to understand and change. Deep modules, information hiding, pulling complexity down, defining errors out of existence, good names, consistency, obvious code — each is a weapon in that one fight. And the payoff is not only better software: as Ousterhout puts it, improve your design skills and "the software development process will be **more enjoyable**." Good design is an investment that pays back in both quality and joy.
+
+**In short:** Every principle here fights complexity — and the reward is software that's better *and* more enjoyable to build.
+
+#### Try to recall — S21
+
+> [!card] posd-S21-01 | concept | synthesize | - | - | 21 "the software development process will be more enjoyable"
+> **Q:** What single goal connects all the book's principles, and what's the payoff?
+> <details><summary>Answer</summary>
+>
+> Reducing complexity. The reward is higher-quality software and a more enjoyable development process.
+>
+> </details>
+>
+> **V1:** Deep modules, naming, consistency, obvious code — what one aim do they all share?
+
+*Reflect:* Which one principle from this book will you apply to your work this week?
+
 ## Glossary
 
 | term | plain English |
@@ -719,3 +965,9 @@ Comments exist to record what code cannot. Ousterhout: the overall idea is to **
 | exception masking | handling an exception low so callers never see it |
 | exception aggregation | handling many exceptions with one shared handler |
 | design it twice | compare two radically different designs before choosing |
+| precise name | a name that says exactly what something is |
+| write comments first | write a method's comment before its code, as a design check |
+| consistency | similar things done in similar ways across the system |
+| obvious code | code a reader understands quickly, with little effort |
+| obscure code | code that makes readers stop, puzzle, and guess |
+| critical path | the minimum code that must run in the common case |

@@ -14,10 +14,10 @@
 
 export const essayMeta = {
     id: 'philosophy-software-design',
-    title: 'A Philosophy of Software Design',
-    subtitle: 'The most important ideas, presented in a mnemonic medium',
+    title: 'A Philosophy of Software Design — Original (Highlights)',
+    subtitle: 'The original hand-made highlights edition · 33 cards, 11 chapters',
     author: 'Based on the book by John Ousterhout',
-    description: 'Learn the foundational principles of software design through an interactive essay that makes memory a choice.',
+    description: 'The first, hand-written highlights edition. The full pipeline-generated edition (all 21 chapters, every card linked to the book) is the other one.',
     cardCount: 0, // will be computed
     readingTime: '35 min',
 };

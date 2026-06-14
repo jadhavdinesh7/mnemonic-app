@@ -5,7 +5,7 @@
     "subtitle": "A Philosophy of Software Design, John Ousterhout",
     "author": "A Philosophy of Software Design, John Ousterhout",
     "description": "Complexity is whatever makes a system hard to understand and change — and readers, not writers, are the judge.",
-    "readingTime": "30 min"
+    "readingTime": "40 min"
   },
   "sections": [
     {
@@ -1212,6 +1212,462 @@
       ]
     },
     {
+      "id": "S14",
+      "heading": "The Power of Names",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Can a bad variable name actually cause a bug?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Names are quietly one of the most important tools in design. <strong>Good names are a form of documentation</strong>: a precise name tells the reader what something is without forcing them into the implementation. Ousterhout's rule is that <strong>names should be precise</strong> and consistent — the same name always means the same thing. The red flag is a name that is <strong>too vague</strong> (<code>data</code>, <code>result</code>, <code>tmp</code>, <code>obj</code>): broad enough to mean almost anything, so it carries no information and invites mistakes."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Precise, consistent names are documentation; vague names hide information and cause bugs."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S14-01",
+              "question": "Why does Ousterhout call good names \"a form of documentation\"?",
+              "answer": "A precise name tells the reader what something is, so they don't have to read the implementation. <span class=\"card-src\">(§14)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "14",
+                "quote": "Good names are a form of documentation"
+              },
+              "variants": [
+                "How can a name do the job of a comment?"
+              ]
+            },
+            {
+              "id": "posd-S14-02",
+              "question": "What is the red flag with names like <code>data</code>, <code>tmp</code>, or <code>result</code>?",
+              "answer": "They're too vague — broad enough to mean anything, so they carry no real information. <span class=\"card-src\">(§14)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "14",
+                "quote": "too vague"
+              },
+              "variants": [
+                "Why is a name that could fit many different things a problem?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which vague name in your code (<code>data</code>, <code>info</code>, <code>tmp</code>...) is hiding what it really holds?"
+        }
+      ]
+    },
+    {
+      "id": "S15",
+      "heading": "Write the Comments First",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> When in the coding process should you write comments — before or after?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ousterhout's surprising advice: <strong>write the comments first</strong> — use <strong>comments as part of the design process</strong>, not an afterthought. You write the interface comment for a class or method <em>before</em> writing its code. If the comment is hard to write or comes out long and awkward, that's an early signal the design is too complicated — so you fix the design before sinking time into code. Writing comments last, by contrast, makes them a chore you rush, and misses this design feedback."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Write the interface comment first; if it's hard to write, the design is probably wrong."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S15-01",
+              "question": "What is the benefit of writing comments <em>first</em>, before the code?",
+              "answer": "A comment that's hard or awkward to write reveals a bad design early, before you write the code. <span class=\"card-src\">(§15)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "15",
+                "quote": "comments as part of the design process"
+              },
+              "variants": [
+                "How does writing the comment first give you design feedback?"
+              ]
+            },
+            {
+              "id": "posd-S15-02",
+              "question": "Why is writing comments first better than writing them last?",
+              "answer": "Done last, comments become a rushed chore; done first, they guide and test the design. <span class=\"card-src\">(§15)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "15",
+                "quote": "Write the comments first"
+              },
+              "variants": [
+                "What goes wrong when comments are left until after the code?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Pick a method you're about to write — could you write its comment first?"
+        }
+      ]
+    },
+    {
+      "id": "S16",
+      "heading": "Modifying Existing Code",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> When you change existing code, what's your responsibility to its design?"
+        },
+        {
+          "type": "paragraph",
+          "text": "The strategic mindset (Chapter 3) doesn't stop after the first version — it applies to every change. When modifying existing code, <strong>stay strategic</strong>: each change is a chance to improve the system's design, not just to bolt on a feature. Ousterhout's warning is blunt: \"if you're not making the design better, you are probably <strong>making it worse</strong>.\" Tactical patches during maintenance are how clean systems rot over time."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Every change should leave the design better; if it doesn't, it's probably making it worse."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S16-01",
+              "question": "What is your design responsibility when modifying existing code?",
+              "answer": "Stay strategic — use each change as a chance to leave the system's design a little better. <span class=\"card-src\">(§16)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "16",
+                "quote": "stay strategic"
+              },
+              "variants": [
+                "How should the strategic mindset apply during maintenance, not just new code?"
+              ]
+            },
+            {
+              "id": "posd-S16-02",
+              "question": "What does Ousterhout say happens if a change doesn't improve the design?",
+              "answer": "You are probably making it worse — tactical patches slowly rot a clean system. <span class=\"card-src\">(§16)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "16",
+                "quote": "making it worse"
+              },
+              "variants": [
+                "Why is a \"quick patch\" during maintenance dangerous?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Did your last code change leave the design better or worse?"
+        }
+      ]
+    },
+    {
+      "id": "S17",
+      "heading": "Consistency",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Why might doing things the \"same boring way\" everywhere be a strength?"
+        },
+        {
+          "type": "paragraph",
+          "text": "<strong>Consistency is a powerful tool</strong> for reducing complexity. When <strong>similar things are done in similar ways</strong>, a reader who learns one part of the system can immediately understand others — and <strong>consistency reduces mistakes</strong>, because behavior matches expectations. It cuts both ways: dissimilar things should look <em>different</em>, so readers aren't misled. Names, coding style, interfaces, and design patterns should all be applied consistently across a codebase."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Do similar things the same way everywhere; it lowers cognitive load and prevents mistakes."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S17-01",
+              "question": "What does \"consistency\" mean in design?",
+              "answer": "Similar things are done in similar ways, and dissimilar things in different ways. <span class=\"card-src\">(§17)</span>",
+              "cardType": "definition",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "17",
+                "quote": "similar things are done in similar ways"
+              },
+              "variants": [
+                "State the rule of consistency in one sentence."
+              ]
+            },
+            {
+              "id": "posd-S17-02",
+              "question": "How does consistency reduce complexity?",
+              "answer": "Learn one part and you understand the rest; behavior matches expectations, so mistakes drop. <span class=\"card-src\">(§17)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "17",
+                "quote": "Consistency is a powerful tool"
+              },
+              "variants": [
+                "Why does a consistent codebase lower cognitive load?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Where does your codebase do the same kind of thing in two different ways?"
+        }
+      ]
+    },
+    {
+      "id": "S18",
+      "heading": "Code Should Be Obvious",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> What single quality, above cleverness or brevity, marks well-written code?"
+        },
+        {
+          "type": "paragraph",
+          "text": "The opposite of obscurity is obviousness, and it is the quality to aim for. <strong>If code is obvious</strong>, a reader can quickly understand what it does without much time or effort — they can guess correctly and move on. Obscure code is the reverse: it makes readers stop, puzzle, and guess wrong, which is exactly how unknown unknowns and bugs creep in. Obviousness comes from good names, consistency, sensible comments, and not surprising the reader."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Aim for obvious code — a reader understands it fast; obscurity is the enemy."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S18-01",
+              "question": "What does it mean for code to be \"obvious\"?",
+              "answer": "A reader can understand what it does quickly, with little time or effort, and guess right. <span class=\"card-src\">(§18)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "18",
+                "quote": "If code is obvious"
+              },
+              "variants": [
+                "What's the test for whether code is \"obvious\"?"
+              ]
+            },
+            {
+              "id": "posd-S18-02",
+              "question": "How is obscure code the opposite of obvious code, and why is it dangerous?",
+              "answer": "Obscure code makes readers puzzle and guess wrong — the source of unknown unknowns and bugs. <span class=\"card-src\">(§18)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "18",
+                "quote": "Code Should be Obvious"
+              },
+              "variants": [
+                "Why is obscurity, not difficulty, the real enemy when reading code?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which file in your project do new readers always have to puzzle over?"
+        }
+      ]
+    },
+    {
+      "id": "S19",
+      "heading": "A Word on Software Trends",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Are popular practices like TDD and design patterns always good?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Ousterhout judges trends by one test: do they reduce complexity? <strong>Design patterns</strong> are useful, but their biggest risk is over-application — forcing a pattern where a simpler solution would do adds complexity. He's also critical of <strong>test-driven development</strong>: its problem is that it focuses attention on getting specific features working \"rather than <strong>finding the best design</strong>.\" The lesson isn't to reject these tools, but to use them only when they genuinely make the system simpler."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Judge any trend by whether it reduces complexity — patterns and TDD included."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S19-01",
+              "question": "What is Ousterhout's main criticism of test-driven development?",
+              "answer": "It focuses on getting specific features working rather than finding the best design. <span class=\"card-src\">(§19)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "19",
+                "quote": "finding the best design"
+              },
+              "variants": [
+                "Why is TDD's focus on passing tests a design risk?"
+              ]
+            },
+            {
+              "id": "posd-S19-02",
+              "question": "What is the biggest risk in using design patterns?",
+              "answer": "Over-application — forcing a pattern where a simpler solution would add less complexity. <span class=\"card-src\">(§19)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "19",
+                "quote": "design patterns"
+              },
+              "variants": [
+                "When does reaching for a design pattern make things worse?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which practice do you follow out of habit rather than because it reduces complexity?"
+        }
+      ]
+    },
+    {
+      "id": "S20",
+      "heading": "Designing for Performance",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> Does writing fast code mean writing complicated code?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Performance and clean design are not enemies. The most important idea is still simplicity: simpler code \"<strong>usually makes systems faster</strong>,\" because there's less work to do. When you do need speed, the key is to <strong>design the code around the critical path</strong> — the minimum work that must happen in the most common case — and keep that path lean, rather than scattering micro-optimizations everywhere."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Simplicity usually means speed; when optimizing, design around the critical path."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S20-01",
+              "question": "What's the relationship between simplicity and performance?",
+              "answer": "They usually agree — simpler code has less work to do, so it usually runs faster. <span class=\"card-src\">(§20)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "20",
+                "quote": "usually makes systems faster"
+              },
+              "variants": [
+                "Does clean design normally cost you speed?"
+              ]
+            },
+            {
+              "id": "posd-S20-02",
+              "question": "When you do need to optimize, what's the key approach?",
+              "answer": "Design around the critical path — the minimum code that must run in the common case — and keep it lean. <span class=\"card-src\">(§20)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "20",
+                "quote": "design the code around the critical path"
+              },
+              "variants": [
+                "Instead of micro-optimizing everywhere, what should you focus on?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Do you know the actual critical path of your system, or are you guessing?"
+        }
+      ]
+    },
+    {
+      "id": "S21",
+      "heading": "The Whole Philosophy",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "<em>Before you read:</em> What single thread ties every chapter of this book together?"
+        },
+        {
+          "type": "paragraph",
+          "text": "Every idea in the book serves one goal: reducing <strong>complexity</strong> so software stays easy to understand and change. Deep modules, information hiding, pulling complexity down, defining errors out of existence, good names, consistency, obvious code — each is a weapon in that one fight. And the payoff is not only better software: as Ousterhout puts it, improve your design skills and \"the software development process will be <strong>more enjoyable</strong>.\" Good design is an investment that pays back in both quality and joy."
+        },
+        {
+          "type": "blockquote",
+          "text": "<strong>In short:</strong> Every principle here fights complexity — and the reward is software that's better <em>and</em> more enjoyable to build."
+        },
+        {
+          "type": "cards",
+          "cards": [
+            {
+              "id": "posd-S21-01",
+              "question": "What single goal connects all the book's principles, and what's the payoff?",
+              "answer": "Reducing complexity. The reward is higher-quality software and a more enjoyable development process. <span class=\"card-src\">(§21)</span>",
+              "cardType": "concept",
+              "stage": "synthesize",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "21",
+                "quote": "the software development process will be more enjoyable"
+              },
+              "variants": [
+                "Deep modules, naming, consistency, obvious code — what one aim do they all share?"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<em>Reflect:</em> Which one principle from this book will you apply to your work this week?"
+        }
+      ]
+    },
+    {
       "id": "glossary",
       "heading": "Glossary",
       "content": [
@@ -1238,7 +1694,13 @@
             "<strong>define errors out of existence</strong> — redefine an operation so the error case can't happen",
             "<strong>exception masking</strong> — handling an exception low so callers never see it",
             "<strong>exception aggregation</strong> — handling many exceptions with one shared handler",
-            "<strong>design it twice</strong> — compare two radically different designs before choosing"
+            "<strong>design it twice</strong> — compare two radically different designs before choosing",
+            "<strong>precise name</strong> — a name that says exactly what something is",
+            "<strong>write comments first</strong> — write a method's comment before its code, as a design check",
+            "<strong>consistency</strong> — similar things done in similar ways across the system",
+            "<strong>obvious code</strong> — code a reader understands quickly, with little effort",
+            "<strong>obscure code</strong> — code that makes readers stop, puzzle, and guess",
+            "<strong>critical path</strong> — the minimum code that must run in the common case"
           ]
         }
       ]
