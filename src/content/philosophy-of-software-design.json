@@ -5,7 +5,7 @@
     "subtitle": "A Philosophy of Software Design, John Ousterhout",
     "author": "A Philosophy of Software Design, John Ousterhout",
     "description": "Complexity is whatever makes a system hard to understand and change — and readers, not writers, are the judge.",
-    "readingTime": "40 min"
+    "readingTime": "45 min"
   },
   "sections": [
     {
@@ -398,6 +398,22 @@
               },
               "variants": [
                 "Who looks like a hero for shipping fast but creates work for everyone after?"
+              ]
+            },
+            {
+              "id": "posd-S4-05",
+              "question": "How does the 10–20% design investment eventually become \"free\"?",
+              "answer": "Past investments save enough time to cover the cost of future ones — the payback loop. <span class=\"card-src\">(§3.3)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "3.3",
+                "quote": "your investments become free"
+              },
+              "variants": [
+                "Why does strategic investment stop costing extra time after a few months?"
               ]
             }
           ]
@@ -857,8 +873,8 @@
             },
             {
               "id": "posd-S9-04",
-              "question": "Can pulling complexity downward be taken too far?",
-              "answer": "Yes. Use discretion — cramming every hard case into one module can bloat it. Balance, not extremes. <span class=\"card-src\">(§8)</span>",
+              "question": "What caution comes with \"pull complexity downwards\"?",
+              "answer": "Use discretion — it can be overdone; cramming every hard case into one module bloats it. <span class=\"card-src\">(§8)</span>",
               "cardType": "concept",
               "stage": "recall",
               "lens": "contrast",
@@ -868,7 +884,7 @@
                 "quote": "can easily be overdone"
               },
               "variants": [
-                "What's the limit on pulling complexity down?"
+                "When does pulling complexity down go too far?"
               ]
             }
           ]
@@ -1261,6 +1277,38 @@
               "variants": [
                 "Why is a name that could fit many different things a problem?"
               ]
+            },
+            {
+              "id": "posd-S14-03",
+              "question": "In the Sprite OS, the name <code>block</code> was used for two different kinds of block number. What happened?",
+              "answer": "The wrong kind slipped through, corrupting data — the bug took six months to find and fix. <span class=\"card-src\">(§14)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "matters",
+              "parent": null,
+              "anchor": {
+                "ref": "14",
+                "quote": "It took six months"
+              },
+              "variants": [
+                "What did one ambiguous variable name cost the Sprite operating system?"
+              ]
+            },
+            {
+              "id": "posd-S14-04",
+              "question": "Beyond avoiding vagueness, what is the positive rule for a good name?",
+              "answer": "Be precise: the name says exactly what the thing is — and is used the same way everywhere. <span class=\"card-src\">(§14)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "attributes",
+              "parent": null,
+              "anchor": {
+                "ref": "14",
+                "quote": "names should be precise"
+              },
+              "variants": [
+                "What property makes a name informative rather than just short?"
+              ]
             }
           ]
         },
@@ -1319,6 +1367,38 @@
               },
               "variants": [
                 "What goes wrong when comments are left until after the code?"
+              ]
+            },
+            {
+              "id": "posd-S15-03",
+              "question": "A method's interface comment comes out long and complicated. What is that a signal of?",
+              "answer": "The abstraction itself is too complex — comments are a \"canary in the coal mine\" of complexity. <span class=\"card-src\">(§15)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "15",
+                "quote": "canary in the coal mine of complexity"
+              },
+              "variants": [
+                "What early warning do comments give you about a design?"
+              ]
+            },
+            {
+              "id": "posd-S15-04",
+              "question": "Besides catching bad designs early, what two benefits come from writing comments as you go?",
+              "answer": "Better documentation, and the writing becomes more enjoyable instead of a dreaded chore. <span class=\"card-src\">(§15)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "matters",
+              "parent": null,
+              "anchor": {
+                "ref": "15",
+                "quote": "writing documentation more enjoyable"
+              },
+              "variants": [
+                "How does comment-first change the experience of documenting?"
               ]
             }
           ]
@@ -1379,6 +1459,38 @@
               "variants": [
                 "Why is a \"quick patch\" during maintenance dangerous?"
               ]
+            },
+            {
+              "id": "posd-S16-03",
+              "question": "After you finish a change, what should the system's structure ideally look like?",
+              "answer": "As if it had been designed from the start with that change in mind. <span class=\"card-src\">(§16)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "matters",
+              "parent": null,
+              "anchor": {
+                "ref": "16",
+                "quote": "if you had designed it from the start"
+              },
+              "variants": [
+                "What's the target structure after any modification, ideally?"
+              ]
+            },
+            {
+              "id": "posd-S16-04",
+              "question": "Why is the commit message the wrong home for an important design note?",
+              "answer": "Documentation belongs where developers will actually see it — the commit log rarely is. <span class=\"card-src\">(§16)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "16",
+                "quote": "the commit log is rarely that place"
+              },
+              "variants": [
+                "Where should a design note live instead of only in the commit log?"
+              ]
             }
           ]
         },
@@ -1437,6 +1549,38 @@
               },
               "variants": [
                 "Why does a consistent codebase lower cognitive load?"
+              ]
+            },
+            {
+              "id": "posd-S17-03",
+              "question": "You have a genuinely better approach than the existing convention. What does Ousterhout say about using it?",
+              "answer": "A \"better idea\" is not sufficient excuse for inconsistency — it must be MUCH better to justify breaking convention. <span class=\"card-src\">(§17)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "17",
+                "quote": "not a sufficient excuse to introduce inconsistencies"
+              },
+              "variants": [
+                "When is breaking an established convention actually justified?"
+              ]
+            },
+            {
+              "id": "posd-S17-04",
+              "question": "A new teammate copies the naming and layout style of nearby code instead of inventing their own. Why is that good design behavior?",
+              "answer": "It preserves consistency — readers' expectations keep working, so the code stays predictable and mistakes drop. <span class=\"card-src\">(§17)</span>",
+              "cardType": "concept",
+              "stage": "apply",
+              "lens": "matters",
+              "parent": "posd-S17-01",
+              "anchor": {
+                "ref": "17",
+                "quote": "similar things are done in similar ways"
+              },
+              "variants": [
+                "Why is \"when in Rome, code like the Romans\" good advice inside a codebase?"
               ]
             }
           ]
@@ -1497,6 +1641,38 @@
               "variants": [
                 "Why is obscurity, not difficulty, the real enemy when reading code?"
               ]
+            },
+            {
+              "id": "posd-S18-03",
+              "question": "When making code easier to WRITE conflicts with making it easier to READ, which side wins?",
+              "answer": "Reading wins — design for ease of reading, even when that costs the writer extra effort. <span class=\"card-src\">(§18)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "contrast",
+              "parent": null,
+              "anchor": {
+                "ref": "18",
+                "quote": "ease of reading, not ease of writing"
+              },
+              "variants": [
+                "Whose convenience matters more: the code's writer or its many readers?"
+              ]
+            },
+            {
+              "id": "posd-S18-04",
+              "question": "Name a programming style the book flags for making code less obvious, and why.",
+              "answer": "Event-driven programming — it makes the flow of control hard to follow. <span class=\"card-src\">(§18)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "18",
+                "quote": "hard to follow the flow of control"
+              },
+              "variants": [
+                "Why does event-driven code tend toward obscurity?"
+              ]
             }
           ]
         },
@@ -1555,6 +1731,22 @@
               },
               "variants": [
                 "When does reaching for a design pattern make things worse?"
+              ]
+            },
+            {
+              "id": "posd-S19-03",
+              "question": "In incremental development, what should each increment be?",
+              "answer": "An abstraction, not a feature — building feature-by-feature invites tactical design. <span class=\"card-src\">(§19)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "mechanism",
+              "parent": null,
+              "anchor": {
+                "ref": "19",
+                "quote": "should be abstractions, not features"
+              },
+              "variants": [
+                "Agile says build incrementally. What kind of increment keeps the design strategic?"
               ]
             }
           ]
@@ -1615,6 +1807,22 @@
               "variants": [
                 "Instead of micro-optimizing everywhere, what should you focus on?"
               ]
+            },
+            {
+              "id": "posd-S20-03",
+              "question": "Before optimizing the part that \"feels slow\", what must you do first — and why?",
+              "answer": "Measure. Programmers' intuitions about performance are unreliable, so guessing fixes the wrong thing. <span class=\"card-src\">(§20)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "failure",
+              "parent": null,
+              "anchor": {
+                "ref": "20",
+                "quote": "intuitions about performance are unreliable"
+              },
+              "variants": [
+                "Why isn't a hunch enough to decide what to optimize?"
+              ]
             }
           ]
         },
@@ -1657,6 +1865,38 @@
               },
               "variants": [
                 "Deep modules, naming, consistency, obvious code — what one aim do they all share?"
+              ]
+            },
+            {
+              "id": "posd-S21-02",
+              "question": "Complete the book's closing summary: \"This book is about one thing: ____.\"",
+              "answer": "Complexity — dealing with it is the most important challenge in software design. <span class=\"card-src\">(§21)</span>",
+              "cardType": "fact",
+              "stage": "recall",
+              "lens": null,
+              "parent": null,
+              "anchor": {
+                "ref": "21",
+                "quote": "This book is about one thing: complexity"
+              },
+              "variants": [
+                "In one word, what is the entire book about?"
+              ]
+            },
+            {
+              "id": "posd-S21-03",
+              "question": "What is \"the reward for being a good designer\"?",
+              "answer": "You spend more of your time on design (the fun part) instead of chasing bugs in brittle code. <span class=\"card-src\">(§21)</span>",
+              "cardType": "concept",
+              "stage": "recall",
+              "lens": "matters",
+              "parent": null,
+              "anchor": {
+                "ref": "21",
+                "quote": "The reward for being a good designer"
+              },
+              "variants": [
+                "How does a good designer's week differ from a poor designer's?"
               ]
             }
           ]

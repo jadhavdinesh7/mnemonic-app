@@ -234,6 +234,16 @@ Ousterhout contrasts two mindsets. **Tactical** programming: your main focus is 
 >
 > **V1:** Who looks like a hero for shipping fast but creates work for everyone after?
 
+> [!card] posd-S4-05 | concept | recall | mechanism | - | 3.3 "your investments become free"
+> **Q:** How does the 10–20% design investment eventually become "free"?
+> <details><summary>Answer</summary>
+>
+> Past investments save enough time to cover the cost of future ones — the payback loop.
+>
+> </details>
+>
+> **V1:** Why does strategic investment stop costing extra time after a few months?
+
 *Reflect:* Where could you spend 10–20% more time on design this week without missing your deadline?
 
 ## S5. Modules Should Be Deep
@@ -495,14 +505,14 @@ When complexity must exist somewhere, **pull it downwards**: handle it inside th
 > **V1:** A network library exposes a retry-timeout parameter. What's the better design?
 
 > [!card] posd-S9-04 | concept | recall | contrast | - | 8 "can easily be overdone"
-> **Q:** Can pulling complexity downward be taken too far?
+> **Q:** What caution comes with "pull complexity downwards"?
 > <details><summary>Answer</summary>
 >
-> Yes. Use discretion — cramming every hard case into one module can bloat it. Balance, not extremes.
+> Use discretion — it can be overdone; cramming every hard case into one module bloats it.
 >
 > </details>
 >
-> **V1:** What's the limit on pulling complexity down?
+> **V1:** When does pulling complexity down go too far?
 
 *Reflect:* Which config option in your code could be replaced by a sensible automatic default?
 
@@ -724,6 +734,26 @@ Names are quietly one of the most important tools in design. **Good names are a 
 >
 > **V1:** Why is a name that could fit many different things a problem?
 
+> [!card] posd-S14-03 | concept | recall | matters | - | 14 "It took six months"
+> **Q:** In the Sprite OS, the name `block` was used for two different kinds of block number. What happened?
+> <details><summary>Answer</summary>
+>
+> The wrong kind slipped through, corrupting data — the bug took six months to find and fix.
+>
+> </details>
+>
+> **V1:** What did one ambiguous variable name cost the Sprite operating system?
+
+> [!card] posd-S14-04 | concept | recall | attributes | - | 14 "names should be precise"
+> **Q:** Beyond avoiding vagueness, what is the positive rule for a good name?
+> <details><summary>Answer</summary>
+>
+> Be precise: the name says exactly what the thing is — and is used the same way everywhere.
+>
+> </details>
+>
+> **V1:** What property makes a name informative rather than just short?
+
 *Reflect:* Which vague name in your code (`data`, `info`, `tmp`...) is hiding what it really holds?
 
 ## S15. Write the Comments First
@@ -755,6 +785,26 @@ Ousterhout's surprising advice: **write the comments first** — use **comments 
 > </details>
 >
 > **V1:** What goes wrong when comments are left until after the code?
+
+> [!card] posd-S15-03 | concept | recall | mechanism | - | 15 "canary in the coal mine of complexity"
+> **Q:** A method's interface comment comes out long and complicated. What is that a signal of?
+> <details><summary>Answer</summary>
+>
+> The abstraction itself is too complex — comments are a "canary in the coal mine" of complexity.
+>
+> </details>
+>
+> **V1:** What early warning do comments give you about a design?
+
+> [!card] posd-S15-04 | concept | recall | matters | - | 15 "writing documentation more enjoyable"
+> **Q:** Besides catching bad designs early, what two benefits come from writing comments as you go?
+> <details><summary>Answer</summary>
+>
+> Better documentation, and the writing becomes more enjoyable instead of a dreaded chore.
+>
+> </details>
+>
+> **V1:** How does comment-first change the experience of documenting?
 
 *Reflect:* Pick a method you're about to write — could you write its comment first?
 
@@ -788,6 +838,26 @@ The strategic mindset (Chapter 3) doesn't stop after the first version — it ap
 >
 > **V1:** Why is a "quick patch" during maintenance dangerous?
 
+> [!card] posd-S16-03 | concept | recall | matters | - | 16 "if you had designed it from the start"
+> **Q:** After you finish a change, what should the system's structure ideally look like?
+> <details><summary>Answer</summary>
+>
+> As if it had been designed from the start with that change in mind.
+>
+> </details>
+>
+> **V1:** What's the target structure after any modification, ideally?
+
+> [!card] posd-S16-04 | concept | recall | failure | - | 16 "the commit log is rarely that place"
+> **Q:** Why is the commit message the wrong home for an important design note?
+> <details><summary>Answer</summary>
+>
+> Documentation belongs where developers will actually see it — the commit log rarely is.
+>
+> </details>
+>
+> **V1:** Where should a design note live instead of only in the commit log?
+
 *Reflect:* Did your last code change leave the design better or worse?
 
 ## S17. Consistency
@@ -819,6 +889,26 @@ The strategic mindset (Chapter 3) doesn't stop after the first version — it ap
 > </details>
 >
 > **V1:** Why does a consistent codebase lower cognitive load?
+
+> [!card] posd-S17-03 | concept | recall | failure | - | 17 "not a sufficient excuse to introduce inconsistencies"
+> **Q:** You have a genuinely better approach than the existing convention. What does Ousterhout say about using it?
+> <details><summary>Answer</summary>
+>
+> A "better idea" is not sufficient excuse for inconsistency — it must be MUCH better to justify breaking convention.
+>
+> </details>
+>
+> **V1:** When is breaking an established convention actually justified?
+
+> [!card] posd-S17-04 | concept | apply | matters | posd-S17-01 | 17 "similar things are done in similar ways"
+> **Q:** A new teammate copies the naming and layout style of nearby code instead of inventing their own. Why is that good design behavior?
+> <details><summary>Answer</summary>
+>
+> It preserves consistency — readers' expectations keep working, so the code stays predictable and mistakes drop.
+>
+> </details>
+>
+> **V1:** Why is "when in Rome, code like the Romans" good advice inside a codebase?
 
 *Reflect:* Where does your codebase do the same kind of thing in two different ways?
 
@@ -852,6 +942,26 @@ The opposite of obscurity is obviousness, and it is the quality to aim for. **If
 >
 > **V1:** Why is obscurity, not difficulty, the real enemy when reading code?
 
+> [!card] posd-S18-03 | concept | recall | contrast | - | 18 "ease of reading, not ease of writing"
+> **Q:** When making code easier to WRITE conflicts with making it easier to READ, which side wins?
+> <details><summary>Answer</summary>
+>
+> Reading wins — design for ease of reading, even when that costs the writer extra effort.
+>
+> </details>
+>
+> **V1:** Whose convenience matters more: the code's writer or its many readers?
+
+> [!card] posd-S18-04 | concept | recall | failure | - | 18 "hard to follow the flow of control"
+> **Q:** Name a programming style the book flags for making code less obvious, and why.
+> <details><summary>Answer</summary>
+>
+> Event-driven programming — it makes the flow of control hard to follow.
+>
+> </details>
+>
+> **V1:** Why does event-driven code tend toward obscurity?
+
 *Reflect:* Which file in your project do new readers always have to puzzle over?
 
 ## S19. A Word on Software Trends
@@ -883,6 +993,16 @@ Ousterhout judges trends by one test: do they reduce complexity? **Design patter
 > </details>
 >
 > **V1:** When does reaching for a design pattern make things worse?
+
+> [!card] posd-S19-03 | concept | recall | mechanism | - | 19 "should be abstractions, not features"
+> **Q:** In incremental development, what should each increment be?
+> <details><summary>Answer</summary>
+>
+> An abstraction, not a feature — building feature-by-feature invites tactical design.
+>
+> </details>
+>
+> **V1:** Agile says build incrementally. What kind of increment keeps the design strategic?
 
 *Reflect:* Which practice do you follow out of habit rather than because it reduces complexity?
 
@@ -916,6 +1036,16 @@ Performance and clean design are not enemies. The most important idea is still s
 >
 > **V1:** Instead of micro-optimizing everywhere, what should you focus on?
 
+> [!card] posd-S20-03 | concept | recall | failure | - | 20 "intuitions about performance are unreliable"
+> **Q:** Before optimizing the part that "feels slow", what must you do first — and why?
+> <details><summary>Answer</summary>
+>
+> Measure. Programmers' intuitions about performance are unreliable, so guessing fixes the wrong thing.
+>
+> </details>
+>
+> **V1:** Why isn't a hunch enough to decide what to optimize?
+
 *Reflect:* Do you know the actual critical path of your system, or are you guessing?
 
 ## S21. The Whole Philosophy
@@ -937,6 +1067,26 @@ Every idea in the book serves one goal: reducing **complexity** so software stay
 > </details>
 >
 > **V1:** Deep modules, naming, consistency, obvious code — what one aim do they all share?
+
+> [!card] posd-S21-02 | fact | recall | - | - | 21 "This book is about one thing: complexity"
+> **Q:** Complete the book's closing summary: "This book is about one thing: ____."
+> <details><summary>Answer</summary>
+>
+> Complexity — dealing with it is the most important challenge in software design.
+>
+> </details>
+>
+> **V1:** In one word, what is the entire book about?
+
+> [!card] posd-S21-03 | concept | recall | matters | - | 21 "The reward for being a good designer"
+> **Q:** What is "the reward for being a good designer"?
+> <details><summary>Answer</summary>
+>
+> You spend more of your time on design (the fun part) instead of chasing bugs in brittle code.
+>
+> </details>
+>
+> **V1:** How does a good designer's week differ from a poor designer's?
 
 *Reflect:* Which one principle from this book will you apply to your work this week?
 
