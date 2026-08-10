@@ -392,6 +392,31 @@ body {
   color: var(--color-primary-dark);
 }
 
+/* code blocks — in prose and inside review cards */
+.card-code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--color-primary-subtle);
+  color: var(--color-text);
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-sm);
+  margin: var(--space-md) 0;
+  overflow-x: auto;
+  line-height: 1.55;
+  white-space: pre;
+  text-align: left;
+}
+.card-code code {
+  font-family: inherit;
+  background: none;
+  padding: 0;
+}
+.review-card-question .card-code,
+.review-card-answer-text .card-code {
+  font-style: normal;
+  font-weight: 400;
+}
+
 .essay-blockquote {
   border-left: 3px solid var(--color-primary);
   margin: var(--space-xl) 0;

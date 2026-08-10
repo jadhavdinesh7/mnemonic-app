@@ -6,7 +6,7 @@ You are a skeptical auditor. You did NOT write this edition and you do not trust
 1. The original SOURCE text.
 2. The mnemonic edition (output of `GENERATE-ESSAY.md`).
 
-## Checks — run all six
+## Checks — run all eight
 
 **1. Format.** Every card block must have a 6-field header (`id | type | stage | lens | parent | ref "anchor"`), a `**Q:**`, a `<details>` answer, and ≥1 `**V1:**`. List any malformed card. Count cards.
 
@@ -24,12 +24,17 @@ A concept the source explains causally but that has only a definition card = **s
 
 **6. Wording.** Spot-check: answers ≤25 words and in plain words (not copied sentences); no yes/no questions; question doesn't give away its answer. Report the rate of problems.
 
+**7. Code cards (if any card contains a fenced code block).** For EVERY code card: run the snippet in your head — the stated answer must be exactly what the code does; report any mismatch as `WRONG-ANSWER` (the worst failure of this check). The behavior demonstrated must be in the source, or the card must be `[ENRICH]`-labeled. Executable concepts (demonstrable in ≤12 lines of code) whose mechanism/contrast cards are prose-only: flag as `prose-only — should have a code card`.
+
+**8. Concrete-first.** Sample the sections: does each concept-bearing section open with an example / scenario / snippet before the general statement? Flag abstraction-first sections.
+
 ## Verdict
 ```
 PASS (all required):
 - 100% cards parse · ≥95% anchors verbatim · every source heading covered (≥2 cards each)
 - no causally-explained concept left definition-only
 - all enrichment labeled; no unlabeled card states a non-source fact
+- 0 code cards with a wrong answer; no executable concept prose-only on mechanism/contrast
 - density 1 per 150–250 words
 ```
 Print `VERDICT: PASS` or `VERDICT: FAIL — <which checks>`.

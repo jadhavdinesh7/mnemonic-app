@@ -13,6 +13,7 @@ This prompt is self-contained — you need no other files.
 3. **Understand before you decompose.** For each concept you MUST build its understanding map (Section 2) before writing its cards.
 4. **Every section gets ≥2 cards**, including the first. A concept that ends up with only a definition card is a failure.
 5. Write everything (questions, answers, summaries) in **plain B1 English** — short sentences, common words. Keep technical terms but gloss them on first use. Answers ≤25 words, in your own words, never a copied sentence.
+   **Concrete before abstract, always:** when a section introduces a concept, open with an example, a tiny scenario, or a short code snippet — THEN state the general idea it illustrates. Dense sources do the reverse; you are fixing that.
 6. Output the exact shape in Section 6. Do not add prose outside it.
 
 ---
@@ -74,6 +75,45 @@ From each map, **every filled row becomes ≥1 card**, and the `mechanism` and `
 
 Wording: focused (one idea), precise (one right answer), no yes/no questions, answer not guessable from the question, ≤25 words, plain English. Give each card 1–2 **variants** (a reworded version of the same question — never a different answer).
 
+### Programming mode — when the source teaches code
+
+Turns on when the source contains code or teaches a programming language, library, or paradigm. **Language-agnostic**: use the source's language; the rules never change.
+
+A concept is **executable** if ≤12 lines of runnable code can demonstrate it. For every executable concept, its mechanism / failure / contrast rows become **code cards**:
+
+| angle | card | question shape |
+|---|---|---|
+| mechanism | *predict* | snippet → "What does this print / return — and why?" |
+| failure | *spot-the-error* | broken snippet → "Why does this fail?" |
+| contrast | *refactor* | "rewrite in the other style" or two snippets → "what changed, and why does it matter?" |
+
+Rules:
+- Snippet ≤12 lines, self-contained, minimal. Put the fenced code block directly after the `**Q:**` line, every line still prefixed `> ` (the converter and app render it).
+- Prefer the source's own code (anchor = a line of that code, verbatim). Fresh snippets are allowed, but the fact demonstrated must be in the source — otherwise the card is `[ENRICH]`.
+- **Run the code in your head twice.** The answer must be exactly what the code does — a wrong code answer is worse than no card.
+- Header: type = `concept` (usually), stage = `apply`, parent = `-`, lens = the angle.
+- For executable concepts, at least one mechanism-or-contrast card MUST be a code card; prose cards may come in addition.
+
+Example:
+
+````
+> [!card] fp-S4-05 | concept | apply | mechanism | - | 4.2 "map returns a new stream"
+> **Q:** What does this print — and why?
+> ```java
+> var r = List.of(1, 2, 3).stream()
+>     .map(x -> x * 2)
+>     .toList();
+> System.out.println(r);
+> ```
+> <details><summary>Answer</summary>
+>
+> [2, 4, 6] — map builds a new list from each element; the original is unchanged.
+>
+> </details>
+>
+> **V1:** Which line proves that `map` does not modify the original list?
+````
+
 ---
 
 ## 5. STAGE D — self-audit (print after the edition)
@@ -97,7 +137,7 @@ Read normally. Try each "Before you read" guess in your head first. At each card
 
 *Before you read:* <one open question this section answers>
 
-<clear simple-English prose. Use **bold** for key terms, `code` for code, and "- " bullets for lists.>
+<clear simple-English prose. Use **bold** for key terms, `code` for inline code, ``` fenced blocks for multi-line code, and "- " bullets for lists.>
 
 **In short:** <one plain sentence>
 

@@ -337,6 +337,9 @@ function renderContentBlock(block) {
         </div>
       `;
 
+    case 'code':
+      return block.html; // pre-escaped <pre class="card-code"> from the converter
+
     case 'cards':
       return renderCardSet(block.cards);
 

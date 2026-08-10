@@ -3,11 +3,12 @@
  * md-to-content.mjs — deterministic converter
  *
  * Turns a markdown "mnemonic edition" (produced by authoring/GENERATE-ESSAY.md)
- * into the app's content JSON. It emits ONLY the block types the renderer in
- * src/main.js already understands (paragraph, heading, subheading, blockquote,
- * list, red-flag, cards), so no renderer changes are needed. Extra card fields
- * (anchor, stage, lens, parent, variants) are preserved for future use and
- * ignored by the current renderer.
+ * into the app's content JSON. It emits the block types the renderer in
+ * src/main.js understands (paragraph, heading, subheading, blockquote,
+ * list, red-flag, code, cards). Fenced code blocks are supported both in
+ * prose (-> a `code` block) and inside card questions/answers (-> embedded
+ * <pre class="card-code"> HTML). Extra card fields (anchor, stage, lens,
+ * parent, variants) are preserved for future use.
  *
  * Usage:
  *   node tools/md-to-content.mjs <input.md> [-o out.json] [--id ID] [--title T]
@@ -48,6 +49,14 @@ function inline(s) {
 }
 function slug(s) {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+// escape only — for code, where markdown must NOT be interpreted
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function codeHtml(codeLines, lang) {
+  const cls = lang ? ` data-lang="${esc(lang)}"` : '';
+  return `<pre class="card-code"${cls}><code>${codeLines.map(esc).join('\n')}</code></pre>`;
 }
 
 // ---------- meta ----------
@@ -92,9 +101,21 @@ function parseCard(run) {
     else ref = refRaw.trim();
   }
   let question = '', answer = '', inDetails = false;
+  let qCode = '', aCode = '', inFence = false, fenceLang = '', fenceBuf = [];
   const variants = [];
   for (let k = 1; k < run.length; k++) {
     const ln = run[k];
+    const f = ln.match(/^```(\S*)\s*$/);
+    if (f) {
+      if (!inFence) { inFence = true; fenceLang = f[1]; fenceBuf = []; }
+      else {
+        inFence = false;
+        const html = codeHtml(fenceBuf, fenceLang);
+        if (inDetails) aCode += html; else qCode += html;
+      }
+      continue;
+    }
+    if (inFence) { fenceBuf.push(ln); continue; }
     const q = ln.match(/^\*\*Q:\*\*\s*(.*)$/);
     if (q) { question = q[1]; continue; }
     if (/<details/.test(ln)) { inDetails = true; continue; }
@@ -108,8 +129,8 @@ function parseCard(run) {
   const refTag = ref ? ` <span class="card-src">(§${ref})</span>` : '';
   return {
     id: cid,
-    question: inline(question),
-    answer: inline(answer) + refTag,
+    question: inline(question) + qCode,
+    answer: inline(answer) + aCode + refTag,
     cardType: type || 'fact',
     stage: stage && stage !== '-' ? stage : 'recall',
     lens: lensRaw && lensRaw !== '-' ? lensRaw : null,
@@ -166,6 +187,15 @@ while (i < lines.length) {
 
   while (i < lines.length && !/^##\s/.test(lines[i])) {
     const l = lines[i];
+    const mFence = l.match(/^```(\S*)\s*$/);
+    if (mFence) {                                             // prose code block
+      flushList();
+      const buf = []; i++;
+      while (i < lines.length && !/^```\s*$/.test(lines[i])) { buf.push(lines[i]); i++; }
+      i++; // skip closing fence
+      content.push({ type: 'code', lang: mFence[1] || null, html: codeHtml(buf, mFence[1]) });
+      continue;
+    }
     if (/^####\s/.test(l)) { i++; continue; }                 // "Try to recall" heading
     if (/^!\[[^\]]*\]\([^)]*\)\s*$/.test(l)) { i++; continue; } // drop standalone image refs (images not rendered yet; captions are separate lines and kept)
     if (l.trim() === '') { flushList(); i++; continue; }
@@ -175,6 +205,10 @@ while (i < lines.length) {
       flushList();
       const { run, next } = collectQuoteRun(i);
       if (run[0] && run[0].startsWith('[!card]')) pushCard(parseCard(run));
+      else if (run[0] && run[0].startsWith('[!plain]')) {
+        const label = run[0].replace(/^\[!plain\]\s*/, '') || 'My words, not the author’s';
+        content.push({ type: 'blockquote', text: `<strong>${inline(label)}:</strong> ${inline(run.slice(1).join(' '))}` });
+      }
       else content.push({ type: 'blockquote', text: inline(run.join(' ')) });
       i = next; continue;
     }
