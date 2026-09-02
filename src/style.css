@@ -392,6 +392,31 @@ body {
   color: var(--color-primary-dark);
 }
 
+/* bridge = model-written background for something the book assumes you know.
+   Deliberately looks different from the author's prose: you must always be
+   able to tell whose words you are reading. */
+.bridge-block {
+  border: 1px dashed var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-subtle);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-xl) 0;
+}
+.bridge-label {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-primary-dark);
+  margin-bottom: var(--space-xs);
+}
+.bridge-text {
+  font-family: var(--font-serif);
+  line-height: 1.7;
+  color: var(--color-text);
+}
+
 /* code blocks — in prose and inside review cards */
 .card-code {
   font-family: var(--font-mono);

@@ -340,6 +340,24 @@ function renderContentBlock(block) {
     case 'code':
       return block.html; // pre-escaped <pre class="card-code"> from the converter
 
+    // The AI fallback converter (meta-prompts/CONVERT.md) emits these three
+    // instead of the shapes md-to-content.mjs produces. Without them the
+    // section summaries, reflection prompts and prerequisite primers were
+    // silently dropped by the default case below.
+    case 'inshort':
+      return `<blockquote class="essay-blockquote"><strong>In short:</strong> ${block.text}</blockquote>`;
+
+    case 'salience':
+      return `<p class="essay-paragraph"><em>Reflect:</em> ${block.text}</p>`;
+
+    case 'bridge':
+      return `
+        <div class="bridge-block">
+          <div class="bridge-label">🌉 Background — not from the book${block.title ? `: ${block.title}` : ''}</div>
+          <div class="bridge-text">${block.text}</div>
+        </div>
+      `;
+
     case 'cards':
       return renderCardSet(block.cards);
 
